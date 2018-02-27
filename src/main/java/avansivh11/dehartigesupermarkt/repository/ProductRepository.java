@@ -1,4 +1,8 @@
 package avansivh11.dehartigesupermarkt.repository;
 
-public class ProductRepository {
+import avansivh11.dehartigesupermarkt.model.product.Product;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ProductRepository extends CrudRepository<Product, Long> {
+
 }

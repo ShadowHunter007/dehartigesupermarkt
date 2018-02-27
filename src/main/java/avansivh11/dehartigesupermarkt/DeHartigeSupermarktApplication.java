@@ -8,6 +8,5 @@ public class DeHartigeSupermarktApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DeHartigeSupermarktApplication.class, args);
-		System.out.println("test");
 	}
 }
