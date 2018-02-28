@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/products")
 public class ProductController {
 
     @Autowired
@@ -19,6 +18,9 @@ public class ProductController {
 
     @RequestMapping("/")
     public String index(Model model) {
+
+        model.addAttribute("title","Welkom bij de hartige supermarkt.");
+
         return "views/product/index";
     }
 }
