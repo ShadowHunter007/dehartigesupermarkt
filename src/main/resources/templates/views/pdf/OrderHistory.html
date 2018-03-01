@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Order History of ${name}</title>
+</head>
+<body>
+<div th:if="${orders.empty}">
+    <p>No orders were found.</p>
+</div>
+
+<table th:if="!${orders.empty}" class="table table-hover">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">1</td>
+        <td><a th:href="@{/order/{id}(id=${order.id})}" th:text="${order.name}">Name</a></td>
+        <td th:text="${oder.description}">Description</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>
