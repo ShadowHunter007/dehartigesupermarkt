@@ -1,10 +1,9 @@
 package avansivh11.dehartigesupermarkt.model.order;
 
-import avansivh11.dehartigesupermarkt.model.product.Product;
+import avansivh11.dehartigesupermarkt.model.account.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,36 +13,35 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
 public class Order extends BaseOrder {
-
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
 
     @Id
     @GeneratedValue
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    protected List<Product> orderItems = new ArrayList<>();
+    protected List<OrderLine> orderLines = new ArrayList<>();
 
-    public void add(Product p) {
-        orderItems.add(p);
+    private Customer customer;
+
+    private OrderState state;
+
+    public Order(Customer customer, OrderState state) {
+        this.customer = customer;
+        this.state = state;
+    }
+
+    public void add(OrderLine line) {
+        orderLines.add(line);
     }
 
     @Override
-    public int price() {
+    public double price() {
         int price = 0;
-        for(Product item : orderItems) {
-            price += item.getPrice();
+        for(OrderLine line : orderLines) {
+            price += line.getPrice();
         }
         return price;
-    }
-
-    @Override
-    public String toString() {
-        String s = "";
-        for (Product item : orderItems) {
-            s += "product: " + item.getName() + "; ";
-        }
-        return s;
     }
 }

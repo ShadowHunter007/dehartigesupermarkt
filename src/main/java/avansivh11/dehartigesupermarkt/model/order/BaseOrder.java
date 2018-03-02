@@ -16,5 +16,5 @@ public abstract class BaseOrder {
 	@GeneratedValue
 	private Long id;
 
-	public abstract int price();
+	public abstract double price();
 }

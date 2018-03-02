@@ -22,16 +22,16 @@ public class OrderOption extends DecoratedOrder {
 
     @NotNull(message = "Price is required.")
     @Min(0)
-    private int price = 0;
+    private double price = 0;
 
-    public OrderOption(String name, int price, BaseOrder order) {
+    public OrderOption(String name, double price, BaseOrder order) {
         super(order);
         this.name = name;
         this.price = price;
     }
 
     @Override
-    public int price() {
+    public double price() {
         return price + order.price();
     }
 }
