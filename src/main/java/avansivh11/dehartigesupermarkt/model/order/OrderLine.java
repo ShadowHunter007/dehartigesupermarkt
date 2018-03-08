@@ -24,12 +24,21 @@ public class OrderLine {
     @NotNull(message = "Product is required.")
     private Product product;
 
+    //Included vat
     @NotNull(message = "Price is required.")
     @Min(0)
     private double price;
 
-    public OrderLine(Product product, double price) {
+    @NotNull(message = "Vul een btw percentage in")
+    private int vatPercentage;
+
+    public OrderLine(Product product, double price, int vatPercentage) {
         this.product = product;
         this.price = price;
+        this.vatPercentage = vatPercentage;
+    }
+
+    public double getPriceExVat() {
+        return price*100/(100+vatPercentage);
     }
 }

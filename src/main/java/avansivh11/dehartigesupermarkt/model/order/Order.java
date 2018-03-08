@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @Table(name="Orders")
 @Entity
@@ -15,33 +14,36 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Order extends BaseOrder {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    protected List<OrderLine> orderLines = new ArrayList<>();
-
+    private double totalPrice;
     private Customer customer;
+    private State  state;
+    private int weightClass;
+    private ArrayList<OrderLine> orderLines;
 
-    private OrderState state;
-
-    public Order(Customer customer, OrderState state) {
+    public Order(Customer customer, int weightClass, ArrayList<OrderLine> orderLines) {
         this.customer = customer;
-        this.state = state;
-    }
-
-    public void add(OrderLine line) {
-        orderLines.add(line);
+        this.weightClass = weightClass;
+        this.orderLines = orderLines;
+        //calculate totalPrice
+        totalPrice = calculateTotalPrice();
+        //perhaps set this after made persistent
+        state = new ReceivedState();
     }
 
     @Override
-    public double price() {
-        int price = 0;
-        for(OrderLine line : orderLines) {
-            price += line.getPrice();
+    public double calculateTotalPrice() {
+        double totalPrice = 0;
+        for(OrderLine orderLine : orderLines) {
+            totalPrice = totalPrice + orderLine.getPrice();
         }
-        return price;
+        return totalPrice;
+    }
+
+    private double getExVatTotalPrice() {
+        double totalPriceExVat = 0;
+        for(OrderLine orderLine : orderLines) {
+            totalPriceExVat = totalPriceExVat + orderLine.getPriceExVat();
+        }
+        return totalPriceExVat;
     }
 }
