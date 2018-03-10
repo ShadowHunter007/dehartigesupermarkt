@@ -26,10 +26,12 @@ public class ProductController {
     public String index(Model model) throws DocumentException, ParserConfigurationException, IOException {
 
         model.addAttribute("title","Welkom bij de hartige supermarkt.");
+
         /* ************* PDF ******************* */
-        BasePdf basePdf = new InvoicePdf();
-        basePdf.buildPDF();
+        //BasePdf basePdf = new InvoicePdf();
+        //basePdf.buildPDF();
          /* ************ PDF - END******************** */
+
         return "views/product/index";
     }
 }
