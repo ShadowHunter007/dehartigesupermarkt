@@ -1,7 +1,6 @@
 package avansivh11.dehartigesupermarkt.model;
 
 import avansivh11.dehartigesupermarkt.service.State;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
