@@ -1,5 +1,7 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.model.logging.AbstractLogger;
+import avansivh11.dehartigesupermarkt.model.logging.WebsiteLogger;
 import avansivh11.dehartigesupermarkt.model.pdf.BasePdf;
 import avansivh11.dehartigesupermarkt.model.pdf.InvoicePdf;
 import avansivh11.dehartigesupermarkt.service.ProductService;
@@ -31,6 +33,12 @@ public class ProductController {
         //BasePdf basePdf = new InvoicePdf();
         //basePdf.buildPDF();
          /* ************ PDF - END******************** */
+
+        /* ************* Logging ******************* */
+        //AbstractLogger logger = AbstractLogger.getChainOfLoggers();
+        AbstractLogger logger = new WebsiteLogger(AbstractLogger.WEBSITE);
+        logger.logMessage(AbstractLogger.WEBSITE, "A Visitor entered the website");
+        /* ************ Logging - END******************** */
 
         return "views/product/index";
     }
