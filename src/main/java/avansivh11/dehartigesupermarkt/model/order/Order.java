@@ -4,9 +4,11 @@ import avansivh11.dehartigesupermarkt.model.account.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Table(name="Orders")
 @Entity
@@ -15,10 +17,13 @@ import java.util.ArrayList;
 @ToString
 public class Order extends BaseOrder {
     private double totalPrice;
+    @OneToOne
     private Customer customer;
+    @OneToOne
     private State  state;
     private int weightClass;
-    private ArrayList<OrderLine> orderLines;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderLine> orderLines;
 
     public Order(Customer customer, int weightClass, ArrayList<OrderLine> orderLines) {
         this.customer = customer;
@@ -34,7 +39,7 @@ public class Order extends BaseOrder {
     public double calculateTotalPrice() {
         double totalPrice = 0;
         for(OrderLine orderLine : orderLines) {
-            totalPrice = totalPrice + orderLine.getPrice();
+            totalPrice = totalPrice + orderLine.getTotalPrice();
         }
         return totalPrice;
     }
@@ -42,7 +47,7 @@ public class Order extends BaseOrder {
     private double getExVatTotalPrice() {
         double totalPriceExVat = 0;
         for(OrderLine orderLine : orderLines) {
-            totalPriceExVat = totalPriceExVat + orderLine.getPriceExVat();
+            totalPriceExVat = totalPriceExVat + orderLine.getTotalPriceExVat();
         }
         return totalPriceExVat;
     }

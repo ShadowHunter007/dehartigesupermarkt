@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,8 +25,10 @@ public abstract class BaseOrder {
 	@NotNull(message = "Vul een geldige waarde in voor de totaalprijs" )
 	private double totalPrice;
 	@NotNull(message = "Vul een geldige waarde in voor de klant")
+	@OneToOne
 	private Customer customer;
 	@NotNull(message="Vul een geldige toestand in voor deze bestelling")
+	@OneToOne
 	private State state;
 	@NotNull(message="Vul een geldige gewichtsklasse in voor deze bestelling")
 	@Min(1)
@@ -33,8 +36,7 @@ public abstract class BaseOrder {
 	private int weightClass;
 	@OneToMany(cascade = CascadeType.ALL)
 	@NotNull(message = "Vul een geldige bestelregel in")
-	private ArrayList<OrderLine> orderLines;
-
+	private List<OrderLine> orderLines;
 
 	public abstract double calculateTotalPrice();
 }

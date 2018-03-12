@@ -4,25 +4,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class giftWrappedOrder extends DecoratedOrder {
+public class DiscountOrder extends DecoratedOrder {
+    private double discountPercentage = 10;
 
-    public giftWrappedOrder(BaseOrder order) {
+    public DiscountOrder(String name, double price, BaseOrder order) {
         super(order);
     }
 
     @Override
     public double calculateTotalPrice() {
+        double newPrice = 100 - ((discountPercentage * order.getTotalPrice())/100);
         return 0;
     }
 }

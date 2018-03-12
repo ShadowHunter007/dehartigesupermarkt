@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:if="${order.orderLines.empty}">
+    <h3>Er zijn geen bestellingen gevonden in uw winkelwagen</h3>
+</div>
+<div th:if="!${order.orderLines.empty}" class ="col-xs-12">
+    <div class="col-xs-12">
+        <h4 th:text="Bestelling voor: ${order.customer.username}"/>
+        <h4 th:text="Bestelnummer: ${order.id}"/>
+        <h4 th:text="Gewichtsklasse: ${order.weightClass}"/>
+        <!-- nog niet gïmplementeerd -->
+        <h4 th:text="Wordt verzonden naar: ${order.customer.address}"/>
+        <!-- ----------------------- -->
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Id:</th>
+            <th>Naam:</th>
+            <th>Omschrijving:</th>
+            <th>hoeveelheid:</th>
+            <th>Prijs:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderLine : ${order.orderLines}">
+            <td th:text="${order.orderLine.id}"></td>
+            <td th:text="${order.orderLine.name}"></td>
+            <td th:text="${order.orderLine.description}"></td>
+            <td th:text="${order.orderLine.amount}"></td>
+            <td th:text="${order.orderLine.price}"></td>
+        </tr>
+        <!-- if options are selected, then extend the table -->
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h4>Totaalprijs excl. btw</h4></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td th:text="${order.totalPrice}"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h4>Totaalprijs incl. btw</h4></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td th:text="${order.getTotalPriceExVat()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer class="footer">
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+</body>
+</html>
