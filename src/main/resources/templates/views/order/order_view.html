@@ -32,37 +32,39 @@
             <td th:text="${order.orderLine.amount}"></td>
             <td th:text="${order.orderLine.price}"></td>
         </tr>
-        <!-- if options are selected, then extend the table -->
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><h4>Totaalprijs excl. btw</h4></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td th:text="${order.totalPrice}"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><h4>Totaalprijs incl. btw</h4></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td th:text="${order.getTotalPriceExVat()}"></td>
-        </tr>
         </tbody>
     </table>
+    <!-- add second optional table for extra order options -->
+    <div class="col-xs-12">
+        <div class="container">
+            <form action="#" th:action="@{/order/options}" method="post">
+                <div class="row">
+                    <div th:switch="${order.weightClass}">
+                        <p th:case="1">Snelle verzending: € 5,00</p>
+                        <p th:case="2">Snelle verzending: € 8,00</p>
+                        <p th:case="3">Snelle verzending: € 12,50</p>
+                    </div>
+                    <input type="checkbox" name="fastShipping" value="0"/>
+                    <p>Als u deze optie aanvinkt, dan wordt uw bestelling geprioriteerd boven de gewone bestellingen en hebt u uw bestelling altijd binnen 24u binnen en meestal zelfs binnen een halve dag</p>
+                </div>
+                <div class="row">
+                    <p>Bezorgen in verrassingsmand: € 3,50</p>
+                    <input type="checkbox" name="giftWrapped" value="0"/>
+                    <p>Als u deze optie aanvinkt, dan wordt uw bestelling in een leuke verrassingsmand gebracht, ideaal voor als u een mandje met boodschappen wil samenstellen voor iemand als verrassing</p>
+                </div>
+                <div class="row">
+                    <p>Vul hier een eventuele kortingscode in die aan dit account is gekoppeld</p>
+                    <input type="text" name="discount" value=""/>
+                    <p>*Kortingscodes werken alleen als ze nog geldig zijn en aan het ingelogde account zijn gekoppeld</p>
+                </div>
+                <button type="submit" class="btn btn-default">Voeg extra opties toe aan de bestelling</button>
+            </form>
+            <div class="row">
+                <h4 th:text="Totaalprijs excl. btw: ${order.getTotalPriceExVat()}"></h4>
+                <h4 th:text="Totaalprijs incl. btw: ${order.totalPrice}"></h4>
+            </div>
+        </div>
+    </div>
 </div>
 <footer class="footer">
     <div th:replace="fragments/footer :: footer"></div>

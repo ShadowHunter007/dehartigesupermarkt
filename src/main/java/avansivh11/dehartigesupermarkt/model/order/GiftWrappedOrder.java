@@ -20,13 +20,13 @@ public class GiftWrappedOrder extends DecoratedOrder {
 
     public GiftWrappedOrder(BaseOrder order) {
         super(order);
-        calculateTotalPrice();
+        double newPrice = calculateTotalPrice();
+        this.setTotalPrice(newPrice);
     }
 
     @Override
     public double calculateTotalPrice() {
         double newPrice = order.getTotalPrice() + giftWrapPrice;
-        order.setTotalPrice(newPrice);
         return newPrice;
     }
 }

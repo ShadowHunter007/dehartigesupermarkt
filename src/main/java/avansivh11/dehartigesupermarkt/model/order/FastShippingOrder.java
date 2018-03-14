@@ -13,13 +13,14 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @ToString
 public class FastShippingOrder extends DecoratedOrder {
-    private double lowWeightPrice = 12.50;
-    private double midWeightPrice = 22.50;
-    private double highWeightPrice = 50.00;
+    private double lowWeightPrice = 5.00;
+    private double midWeightPrice = 8.00;
+    private double highWeightPrice = 12.50;
 
     public FastShippingOrder(BaseOrder order) {
         super(order);
-        calculateTotalPrice();
+        double newPrice = calculateTotalPrice();
+        this.setTotalPrice(newPrice);
     }
 
     @Override
@@ -30,15 +31,12 @@ public class FastShippingOrder extends DecoratedOrder {
 
         if(orderWeightClass == 1) {
             newPrice = initialPrice + lowWeightPrice;
-            this.setTotalPrice(newPrice);
             return newPrice;
         } else if(orderWeightClass == 2) {
             newPrice = initialPrice + midWeightPrice;
-            this.setTotalPrice(newPrice);
             return newPrice;
         } else if(orderWeightClass == 3) {
             newPrice = initialPrice + highWeightPrice;
-            this.setTotalPrice(newPrice);
             return newPrice;
         } else {
             throw new IllegalArgumentException();

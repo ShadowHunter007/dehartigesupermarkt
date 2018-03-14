@@ -15,13 +15,14 @@ import javax.persistence.Entity;
 public class DiscountOrder extends DecoratedOrder {
     private double discountPercentage = 10;
 
-    public DiscountOrder(String name, double price, BaseOrder order) {
+    public DiscountOrder(BaseOrder order) {
         super(order);
+        calculateTotalPrice();
     }
 
     @Override
     public double calculateTotalPrice() {
         double newPrice = 100 - ((discountPercentage * order.getTotalPrice())/100);
-        return 0;
+        return newPrice;
     }
 }
