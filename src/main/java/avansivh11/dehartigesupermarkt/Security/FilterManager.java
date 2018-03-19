@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class FilterManager {
     public static void process(HttpServletRequest request,
-                               HttpServletResponse response, OnIntercept callback) throws IOException, ServletException {
+                               HttpServletResponse response, FrontCommand frontCommand) throws IOException, ServletException {
         FilterChain filterChain = new FilterChainImplementation(
-                new AuthenticationFilter(callback), new LoginCounterFilter());
+                new AuthenticationFilter(), new LoginCounterFilter());
         filterChain.doFilter(request, response);
     }
 }

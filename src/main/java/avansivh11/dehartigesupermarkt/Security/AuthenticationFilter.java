@@ -8,10 +8,12 @@ import java.io.IOException;
 
 
 public class AuthenticationFilter implements Filter {
-    private OnIntercept callback;
+    //private OnIntercept callback;
 
-    public AuthenticationFilter(OnIntercept callback) {
-        this.callback = callback;
+    //public AuthenticationFilter(OnIntercept callback) {
+    //    this.callback = callback;
+    //}
+    public AuthenticationFilter(){
     }
 
     @Override
