@@ -36,7 +36,7 @@ public class ProductController {
 
         /* ************* Logging ******************* */
         AbstractLogger logger = AbstractLogger.getChainOfLoggers(loggingService);
-        logger.logMessage(AbstractLogger.WEBSITE, "A visitor is on the homepage");
+        logger.logMessage(AbstractLogger.WEBSITE, "A visitor is on the homepage.");
         /* ************ Logging - END******************** */
 
         return "views/product/index";
