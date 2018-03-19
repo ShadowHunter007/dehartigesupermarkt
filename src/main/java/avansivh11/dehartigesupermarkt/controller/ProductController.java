@@ -1,9 +1,7 @@
 package avansivh11.dehartigesupermarkt.controller;
 
-import avansivh11.dehartigesupermarkt.model.logging.AbstractLogger;
-import avansivh11.dehartigesupermarkt.model.logging.WebsiteLogger;
-import avansivh11.dehartigesupermarkt.model.pdf.BasePdf;
-import avansivh11.dehartigesupermarkt.model.pdf.InvoicePdf;
+import avansivh11.dehartigesupermarkt.service.LoggingService;
+import avansivh11.dehartigesupermarkt.service.logging.AbstractLogger;
 import avansivh11.dehartigesupermarkt.service.ProductService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +15,13 @@ import java.io.IOException;
 @Controller
 public class ProductController {
 
-    @Autowired
     private final ProductService productService;
+    private final LoggingService loggingService;
 
-    public ProductController(ProductService productService) {
+    @Autowired
+    public ProductController(ProductService productService, LoggingService loggingService) {
         this.productService = productService;
+        this.loggingService = loggingService;
     }
 
     @RequestMapping("/")
@@ -35,9 +35,8 @@ public class ProductController {
          /* ************ PDF - END******************** */
 
         /* ************* Logging ******************* */
-        //AbstractLogger logger = AbstractLogger.getChainOfLoggers();
-        AbstractLogger logger = new WebsiteLogger(AbstractLogger.WEBSITE);
-        logger.logMessage(AbstractLogger.WEBSITE, "A Visitor entered the website");
+        AbstractLogger logger = AbstractLogger.getChainOfLoggers(loggingService);
+        logger.logMessage(AbstractLogger.WEBSITE, "A visitor is on the homepage");
         /* ************ Logging - END******************** */
 
         return "views/product/index";

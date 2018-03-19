@@ -1,10 +1,9 @@
-package avansivh11.dehartigesupermarkt.model.logging;
+package avansivh11.dehartigesupermarkt.service.logging;
 
 public class FileLogger extends AbstractLogger {
 
-    public FileLogger(int level){
+    FileLogger(int level){
         this.level = level;
-        this.nextLogger = new ConsoleLogger(CONSOLE);
     }
 
     @Override

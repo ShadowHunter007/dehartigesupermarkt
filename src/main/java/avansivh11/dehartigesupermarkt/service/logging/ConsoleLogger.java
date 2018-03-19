@@ -1,8 +1,8 @@
-package avansivh11.dehartigesupermarkt.model.logging;
+package avansivh11.dehartigesupermarkt.service.logging;
 
 public class ConsoleLogger extends AbstractLogger {
 
-    public ConsoleLogger(int level){
+    ConsoleLogger(int level){
         this.level = level;
     }
 
