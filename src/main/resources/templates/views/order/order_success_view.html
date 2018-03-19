@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:if="${baseOrder.empty}" class="row">
+            <div class="col-xs-12">
+                <h3>Er is iets misgegaan met het plaatsen van uw bestelilng. Neem contact op met de klantenservice</h3>
+            </div>
+        </div>
+        <div th:if="!{$baseOrder.empty}" class="row">
+            <div class="col-xs-12">
+                <h4>Dankuwel voor het plaatsen van uw bestelling, hieronder staan de belangrijkste details nog een keer van uw bestelling</h4>
+            </div>
+            <div class="col-xs-12">
+                <table  class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>Bestelling voor: </td>
+                            <td th:text="$baseOrder.customer.username}"></td>
+                        </tr>
+                        <tr>
+                            <td>Bestelnummer:</td>
+                            <td th:text="$baseOrder.id}"></td>
+                        </tr>
+                        <tr>
+                            <td>Totaalprijs:</td>
+                            <td th:text="$baseOrder.totalPrice}"></td>
+                        </tr>
+                        <tr>
+                            <td>Bezorgadres: </td>
+                            <!-- nog niet gïmplementeerd -->
+                            <td th:text="$baseOrder.customer.address}"></td>
+                            <!-- ----------------------- -->
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- additional information -->
+            <div class="col-xs-12">
+                <p>Hier kunt u de status van uw bestelling bekijken: </p>
+                <a th:href="@{/order/status(id=${order.id})}" class="btn btn-success">Details bestelling</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+</body>
+</html>

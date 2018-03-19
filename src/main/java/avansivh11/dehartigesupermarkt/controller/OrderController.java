@@ -1,20 +1,21 @@
 package avansivh11.dehartigesupermarkt.controller;
 
 import avansivh11.dehartigesupermarkt.model.order.*;
-import avansivh11.dehartigesupermarkt.repository.DiscountOrderRepository;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value = "/order")
 public class OrderController {
-    private final String ORDER_VIEW = "views/order/order_view";
+    private final String ORDER_VIEW = "views/order/order_view.html";
+    private final String ORDER_SUCCESS = "views/order/success.html";
+    private final String ORDER_STATUS = "views/order/order_status_view.html";
+    private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview.html";
     private BaseOrder currentOrder;
 
     @Autowired
@@ -25,13 +26,13 @@ public class OrderController {
     }
 
     //after creating order (by clicking on the next/confirm button on shoppingcart view) this method is called with the newly created order
-    @RequestMapping(value="/view", method = RequestMethod.GET)
+    @GetMapping("/view")
     public ModelAndView getOrderView(BaseOrder order) {
         this.currentOrder = order;
         return new ModelAndView(ORDER_VIEW, "order", order);
     }
 
-    @PostMapping("/options")
+    @PostMapping("/confirm")
     public ModelAndView extraOptionsSubmit(
         @RequestParam(value="fastShipping", required=false) boolean fastShipping,
         @RequestParam(value="giftWrapped", required=false) boolean giftWrapped,
@@ -40,7 +41,20 @@ public class OrderController {
         //updates currentOrder automatically
         decorateOrder(fastShipping, giftWrapped, discount);
 
-        return new ModelAndView(ORDER_VIEW, "order", currentOrder);
+        return new ModelAndView(ORDER_SUCCESS, "order", currentOrder);
+    }
+
+    @GetMapping("/status/{id}")
+    public ModelAndView showOrderStatus(@PathVariable("id") String id) {
+        Long requestOrderId = Long.parseLong(id);
+        service.getOrderById(requestOrderId);
+        return new ModelAndView(ORDER_STATUS, "order", currentOrder);
+    }
+
+    @GetMapping("/status_overview")
+    public ModelAndView showOrderStatusOverview() {
+        ArrayList<BaseOrder> orders = service.getOrders();
+        return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
     }
 
     private void decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount) {
