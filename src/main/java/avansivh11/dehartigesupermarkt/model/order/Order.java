@@ -4,7 +4,6 @@ import avansivh11.dehartigesupermarkt.model.account.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,19 +19,20 @@ public class Order extends BaseOrder {
     @OneToOne
     private Customer customer;
     @OneToOne
-    private State  state;
+    private OrderState currentState;
     private int weightClass;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLine> orderLines;
 
-    public Order(Customer customer, int weightClass, ArrayList<OrderLine> orderLines) {
+    public Order(Customer customer, ArrayList<OrderLine> orderLines) {
         this.customer = customer;
-        this.weightClass = weightClass;
         this.orderLines = orderLines;
         //calculate totalPrice
         totalPrice = calculateTotalPrice();
+        //calculate weightclass
+        weightClass = calculateWeightClass(orderLines.size());
         //perhaps set this after made persistent
-        state = new ReceivedState();
+        currentState = new OrderReceived(this);
     }
 
     @Override
@@ -50,5 +50,18 @@ public class Order extends BaseOrder {
             totalPriceExVat = totalPriceExVat + orderLine.getTotalPriceExVat();
         }
         return totalPriceExVat;
+    }
+
+    private int calculateWeightClass(int orderLineCount) {
+        int weightClass = 0;
+        if(orderLineCount > 0 && orderLineCount < 4) {
+            return weightClass = 1;
+        } else if(orderLineCount >= 4 && orderLineCount < 7) {
+            return weightClass = 2;
+        } else if(orderLineCount <= 0) {
+            throw new java.util.EmptyStackException();
+        } else {
+            return weightClass = 3;
+        }
     }
 }

@@ -20,23 +20,23 @@ public abstract class BaseOrder {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	protected Long id;
 
 	@NotNull(message = "Vul een geldige waarde in voor de totaalprijs" )
-	private double totalPrice;
+	protected double totalPrice;
 	@NotNull(message = "Vul een geldige waarde in voor de klant")
 	@OneToOne
-	private Customer customer;
+	protected Customer customer;
 	@NotNull(message="Vul een geldige toestand in voor deze bestelling")
 	@OneToOne
-	private State state;
+	protected OrderState currentState;
 	@NotNull(message="Vul een geldige gewichtsklasse in voor deze bestelling")
 	@Min(1)
 	@Max(3)
-	private int weightClass;
+	protected int weightClass;
 	@OneToMany(cascade = CascadeType.ALL)
 	@NotNull(message = "Vul een geldige bestelregel in")
-	private List<OrderLine> orderLines;
+	protected List<OrderLine> orderLines;
 
 	public abstract double calculateTotalPrice();
 }

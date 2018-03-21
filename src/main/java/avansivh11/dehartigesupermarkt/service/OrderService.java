@@ -22,4 +22,7 @@ public class OrderService {
 
     public BaseOrder getOrderById(Long id) { return this.orderRepository.findOne(id);}
 
+    public BaseOrder createOrder(BaseOrder order) {
+        return this.orderRepository.save(order);
+    }
 }
