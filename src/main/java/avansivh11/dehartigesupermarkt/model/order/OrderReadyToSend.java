@@ -8,6 +8,6 @@ public class OrderReadyToSend extends OrderState {
 
     @Override
     public void goNext(BaseOrder order) {
-
+        context.setCurrentState(new OrderSent(order));
     }
 }

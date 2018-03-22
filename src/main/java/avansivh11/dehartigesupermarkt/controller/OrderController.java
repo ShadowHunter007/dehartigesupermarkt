@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 
 @Controller
-//@RequestMapping(value = "/orders")
+@RequestMapping(value = "/orders")
 public class OrderController {
     private final String ORDER_VIEW = "views/order/order_view.html";
     private final String ORDER_SUCCESS = "views/order/success.html";
@@ -27,12 +27,12 @@ public class OrderController {
     }
 
     //cannot be implemented yet
-    /*@PostMapping("/orders")
+    /*@PostMapping("/")
     public ModelAndView createOrder(
             @RequestParam(value="shoppingcart", required=true) ShoppingCart shoppingCart
     ) {
         BaseOrder order = new Order(shoppingCart.getCustomer(), shoppingCart.getOrderLines());
-        service.createOrder(order);
+        service.saveOrder(order);
         return new ModelAndView(ORDER_VIEW, "order", order);
     }*/
 
@@ -43,7 +43,7 @@ public class OrderController {
         return new ModelAndView(ORDER_VIEW, "order", order);
     }*/
 
-    @PutMapping("/orders/{id}")
+    @PutMapping("/{id}")
     public ModelAndView extraOptionsSubmit(
         @PathVariable("id") String id,
         @RequestParam(value="fastShipping", required=false) boolean fastShipping,
@@ -55,18 +55,18 @@ public class OrderController {
         //updates currentOrder automatically
         order = decorateOrder(fastShipping, giftWrapped, discount, order);
         //update in the database
-        //gebeurt dit automatisch of moet ik hier een functie voor in de repo aanroepen??================================
+        service.saveOrder(order);
 
         return new ModelAndView(ORDER_SUCCESS, "order", order);
     }
 
-    @GetMapping("/orders/{id}/status")
+    @GetMapping("/{id}/status")
     public ModelAndView showOrderStatus(@PathVariable("id") String id) {
         BaseOrder order = service.getOrderById(Long.parseLong(id));
         return new ModelAndView(ORDER_STATUS, "order", order);
     }
 
-    @GetMapping("/orders/status")
+    @GetMapping("/status")
     public ModelAndView showOrderStatusOverview() {
         ArrayList<BaseOrder> orders = service.getOrders();
         return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
