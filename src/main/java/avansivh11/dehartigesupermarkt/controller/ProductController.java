@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     @RequestMapping("/")
-    public String index(Model model) throws DocumentException, ParserConfigurationException, IOException {
+    public String index(Model model) {
 
         model.addAttribute("title","Welkom bij de hartige supermarkt.");
 
@@ -38,7 +38,6 @@ public class ProductController {
         AbstractLogger logger = AbstractLogger.getChainOfLoggers(loggingService);
         logger.logMessage(AbstractLogger.WEBSITE, "A visitor is on the homepage.");
         /* ************ Logging - END******************** */
-
         return "views/product/index";
     }
 }
