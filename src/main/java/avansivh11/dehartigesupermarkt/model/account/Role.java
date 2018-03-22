@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.account;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,5 +20,8 @@ public class Role {
     @Column(name="role")
     private String role;
 
+    public Role(String role){
+        this.role = role;
+    }
 }
 

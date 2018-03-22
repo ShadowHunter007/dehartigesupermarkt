@@ -18,12 +18,17 @@ import java.util.*;
 
 @Service("loginService")
 public class LoginService  implements ILoginService, UserDetailsService {
-    @Autowired
+
     private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    public LoginService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -32,9 +37,13 @@ public class LoginService  implements ILoginService, UserDetailsService {
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(true);
-        Role userRole = roleRepository.findByRole("ADMIN");
+        Role userRole = roleRepository.findByRole("CUSTOMER");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         userRepository.save(user);
+    }
+
+    public void createRole(Role role){
+        roleRepository.save(role);
     }
 
     @Override
@@ -56,7 +65,15 @@ public class LoginService  implements ILoginService, UserDetailsService {
     }
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, authorities);
+        return new org.springframework.security.core.userdetails
+                .User(user.getEmail(),
+                    user.getPassword(),
+                    user.isActive(),
+                    true,
+                    true,
+                    true,
+                    authorities
+                );
     }
 
 }
