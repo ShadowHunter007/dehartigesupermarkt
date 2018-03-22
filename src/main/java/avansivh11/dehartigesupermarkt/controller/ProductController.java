@@ -23,13 +23,13 @@ public class ProductController {
     }
 
     @RequestMapping("/")
-    public String index(Model model) throws DocumentException, ParserConfigurationException, IOException {
+    public String index(Model model) {
 
         model.addAttribute("title","Welkom bij de hartige supermarkt.");
-        /* ************* PDF ******************* */
+        /* ************* PDF *******************
         BasePdf basePdf = new InvoicePdf();
         basePdf.buildPDF();
-         /* ************ PDF - END******************** */
+        ************ PDF - END******************** */
         return "views/product/index";
     }
 }

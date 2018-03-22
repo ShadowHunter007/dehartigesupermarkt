@@ -45,15 +45,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
-                //.defaultSuccessUrl("/")
+                .defaultSuccessUrl("/views/product/index.html")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").and().exceptionHandling()
                 .accessDeniedPage("/access-denied");
-             http.addFilterAfter(new AuthenticationFilter(), BasicAuthenticationFilter.class);
-             http.addFilterAfter(new LoginCounterFilter(), LoginCounterFilter.class);
+            //.addFilterAfter(new AuthenticationFilter(), BasicAuthenticationFilter.class);
+             //.addFilterAfter(new LoginCounterFilter(), LoginCounterFilter.class);
     }
 
    @Override
