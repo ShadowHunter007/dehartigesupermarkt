@@ -28,6 +28,8 @@ public class orderServiceTest {
         orders.add(new FastShippingOrder());
         orders.add(new Order());
 
+
+
         OrderService orderService = new OrderService(orderRepository);
         ArrayList<BaseOrder> sortedList = orderService.fastShippingSort(orders);
 

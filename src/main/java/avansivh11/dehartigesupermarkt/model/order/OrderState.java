@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -32,6 +33,8 @@ public abstract class OrderState {
     @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])[\\/\\-](0?[1-9]|1[012])[\\/\\-]\\d{4}$")
     protected String exitDate;
 
+    @NotNull(message="Vul een geldige baseorder in voor een toestand")
+    @OneToOne
     protected BaseOrder context;
 
     public OrderState(BaseOrder context) {

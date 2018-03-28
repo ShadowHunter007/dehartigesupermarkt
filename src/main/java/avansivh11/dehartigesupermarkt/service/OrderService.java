@@ -6,17 +6,25 @@ import com.sun.org.apache.bcel.internal.generic.FASTORE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
 public class OrderService {
-    private ArrayList<BaseOrder> sortedFastShippingList = new ArrayList<>();
+    private ArrayList<BaseOrder> sortedFastShippingList;
 
     @Autowired
     private final BaseOrderRepository orderRepository;
 
+    //make a workaround for testing
     public OrderService(BaseOrderRepository repo) {
         this.orderRepository = repo;
+        //cache the orders from the database in the orderRepository that have a status of 'Received'
+        sortedFastShippingList = (ArrayList)repo.getFastShippingOrders();
+        //check if orders need to be set to ready to send
+        if(sortedFastShippingList.size() >= 5) {
+            setOrdersReadyToSend();
+        }
     }
 
     public ArrayList<BaseOrder> getOrders() {
@@ -29,17 +37,42 @@ public class OrderService {
 
     public BaseOrder saveOrder(BaseOrder order) {
         this.orderRepository.save(order);
-        //update the cached sortedFastShippingList
-        fastShippingSort(getOrders());
+        //cache immediatly to avoid extra database accesses if needed
+        if(order.getCurrentState() instanceof OrderReceived) {
+            sortedFastShippingList.add(order);
+        }
+
+        //check if there are now enough entries to send the next badge of orders
+
         return order;
+    }
+
+    public int checkOrderReceivedAmount() {
+        //check if there are engough orders on status received to see if a new badge of orders can be sent
+        int count = 0;
+        for(BaseOrder currentOrder : sortedFastShippingList) {
+            if(currentOrder.getCurrentState() instanceof OrderReceived) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void setOrdersReadyToSend() {
         assert sortedFastShippingList.size() >= 5;
-        assert sortedFastShippingList.get(4) instanceof FastShippingOrder;
-
-        for(int i =0; i < 5; i++) {
-            sortedFastShippingList.get(i).getCurrentState().goNext(sortedFastShippingList.get(i));
+        //sort the list on fastshipping order
+        sortedFastShippingList = fastShippingSort(sortedFastShippingList);
+        //set the first 5 elements of the list with status 'received' to 'sent'
+        for(int i = 0;  i < sortedFastShippingList.size(); i++) {
+            if(sortedFastShippingList.get(i).getCurrentState() instanceof OrderReceived) {
+                BaseOrder order = sortedFastShippingList.get(i);
+                //set the new state
+                order.getCurrentState().goNext(order);
+                //save to db
+                saveOrder(order);
+                //delete from the list with orders that are 'recevied'
+                remove(order);
+            }
         }
     }
 
@@ -62,5 +95,10 @@ public class OrderService {
         sortedFastShippingList = orders;
 
         return orders;
+    }
+
+    //removes the specified entry from the sortedFastShippingList
+    private void remove(BaseOrder order) {
+        sortedFastShippingList.remove(order);
     }
 }
