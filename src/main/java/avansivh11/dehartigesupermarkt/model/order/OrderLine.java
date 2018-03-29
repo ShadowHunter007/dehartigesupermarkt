@@ -35,11 +35,16 @@ public class OrderLine {
     @NotNull(message = "Vul een btw percentage in")
     private int vatPercentage;
 
-    public OrderLine(Product product, int amount) {
+    public OrderLine(Product product, int amount, int vatPercentage) {
         this.product = product;
         this.amount = amount;
+        this.vatPercentage = vatPercentage;
         this.totalPrice = product.getPrice() * amount;
     }
 
-    public double getTotalPriceExVat() { return totalPrice*100/(100+vatPercentage); }
+    public double getTotalPriceExVat() {
+        double divisor = vatPercentage / 100 + 1;
+        double priceExVat = totalPrice / divisor;
+        return priceExVat;
+    }
 }

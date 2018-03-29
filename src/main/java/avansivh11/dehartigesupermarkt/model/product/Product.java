@@ -31,9 +31,9 @@ public class Product {
 
     @NotNull(message = "Price is required.")
     @Min(0)
-    private int price;
+    private double price;
 
-    public Product(String name, String description, int price) {
+    public Product(String name, String description, double price) {
         this.name = name;
         this.description = description;
         this.price = price;

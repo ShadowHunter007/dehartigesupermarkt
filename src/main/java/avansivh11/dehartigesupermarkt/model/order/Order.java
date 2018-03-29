@@ -3,6 +3,7 @@ package avansivh11.dehartigesupermarkt.model.order;
 import avansivh11.dehartigesupermarkt.model.account.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name="Orders")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @ToString
 public class Order extends BaseOrder {
@@ -27,11 +29,12 @@ public class Order extends BaseOrder {
     public Order(Customer customer, ArrayList<OrderLine> orderLines) {
         this.customer = customer;
         this.orderLines = orderLines;
-        //calculate totalPrice
-        totalPrice = calculateTotalPrice();
-        //calculate weightclass
-        weightClass = calculateWeightClass(orderLines.size());
-        //perhaps set this after made persistent
+        if(orderLines != null && !orderLines.isEmpty()) {
+            //calculate totalPrice
+            totalPrice = calculateTotalPrice();
+            //calculate weightclass
+            weightClass = calculateWeightClass();
+        }
         currentState = new OrderReceived(this);
     }
 
@@ -44,7 +47,7 @@ public class Order extends BaseOrder {
         return totalPrice;
     }
 
-    private double getExVatTotalPrice() {
+    public double getExVatTotalPrice() {
         double totalPriceExVat = 0;
         for(OrderLine orderLine : orderLines) {
             totalPriceExVat = totalPriceExVat + orderLine.getTotalPriceExVat();
@@ -52,7 +55,8 @@ public class Order extends BaseOrder {
         return totalPriceExVat;
     }
 
-    private int calculateWeightClass(int orderLineCount) {
+    private int calculateWeightClass() {
+        int orderLineCount = orderLines.size();
         int weightClass = 0;
         if(orderLineCount > 0 && orderLineCount < 4) {
             return weightClass = 1;

@@ -12,11 +12,9 @@ import java.util.*;
 @Service
 public class OrderService {
     private ArrayList<BaseOrder> sortedFastShippingList;
-
-    @Autowired
     private final BaseOrderRepository orderRepository;
 
-    //make a workaround for testing
+    @Autowired
     public OrderService(BaseOrderRepository repo) {
         this.orderRepository = repo;
         //cache the orders from the database in the orderRepository that have a status of 'Received'
@@ -25,6 +23,12 @@ public class OrderService {
         if(sortedFastShippingList.size() >= 5) {
             setOrdersReadyToSend();
         }
+    }
+
+    //Warning -> test constructor
+    public OrderService(BaseOrderRepository repo, ArrayList<BaseOrder> sortedFastShippingList) {
+        this.orderRepository = repo;
+        this.sortedFastShippingList = sortedFastShippingList;
     }
 
     public ArrayList<BaseOrder> getOrders() {
@@ -43,35 +47,30 @@ public class OrderService {
         }
 
         //check if there are now enough entries to send the next badge of orders
-
-        return order;
-    }
-
-    public int checkOrderReceivedAmount() {
-        //check if there are engough orders on status received to see if a new badge of orders can be sent
-        int count = 0;
-        for(BaseOrder currentOrder : sortedFastShippingList) {
-            if(currentOrder.getCurrentState() instanceof OrderReceived) {
-                count++;
-            }
+        if(sortedFastShippingList.size() >= 5){
+            setOrdersReadyToSend();
         }
-        return count;
+        return order;
     }
 
     public void setOrdersReadyToSend() {
         assert sortedFastShippingList.size() >= 5;
+        int count = 0;
         //sort the list on fastshipping order
         sortedFastShippingList = fastShippingSort(sortedFastShippingList);
+        Iterator iter = sortedFastShippingList.iterator();
         //set the first 5 elements of the list with status 'received' to 'sent'
-        for(int i = 0;  i < sortedFastShippingList.size(); i++) {
-            if(sortedFastShippingList.get(i).getCurrentState() instanceof OrderReceived) {
-                BaseOrder order = sortedFastShippingList.get(i);
+        while(iter.hasNext()) {
+            BaseOrder order = (BaseOrder)iter.next();
+            if(count < 5 && order.getCurrentState() instanceof OrderReceived) {
                 //set the new state
                 order.getCurrentState().goNext(order);
                 //save to db
                 saveOrder(order);
                 //delete from the list with orders that are 'recevied'
-                remove(order);
+                iter.remove();
+                //another item has its status changed so increment count
+                count++;
             }
         }
     }
@@ -83,11 +82,10 @@ public class OrderService {
             if(o1 instanceof FastShippingOrder && !(o2 instanceof FastShippingOrder)) {
                 return -1;
             } else if(!(o1 instanceof FastShippingOrder) && o2 instanceof FastShippingOrder) {
-                return -1;
-            } else if(!(o1 instanceof FastShippingOrder) && !(o2 instanceof FastShippingOrder)) {
                 return 1;
-            } else
-            return 0;
+            } else {
+                return 0;
+            }
         };
         //use the merge sort from java to sort the arrayList
         Collections.sort(orders, orderInstanceComparator);
@@ -95,10 +93,5 @@ public class OrderService {
         sortedFastShippingList = orders;
 
         return orders;
-    }
-
-    //removes the specified entry from the sortedFastShippingList
-    private void remove(BaseOrder order) {
-        sortedFastShippingList.remove(order);
     }
 }

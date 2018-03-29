@@ -17,12 +17,14 @@ public class DiscountOrder extends DecoratedOrder {
 
     public DiscountOrder(BaseOrder order) {
         super(order);
-        calculateTotalPrice();
+        super.setWeightClass(order.getWeightClass());
+        this.setTotalPrice(calculateTotalPrice());
     }
 
     @Override
     public double calculateTotalPrice() {
-        double newPrice = 100 - ((discountPercentage * order.getTotalPrice())/100);
+        double initialPrice = order.getTotalPrice();
+        double newPrice = initialPrice - ((initialPrice/100)*discountPercentage);
         return newPrice;
     }
 }

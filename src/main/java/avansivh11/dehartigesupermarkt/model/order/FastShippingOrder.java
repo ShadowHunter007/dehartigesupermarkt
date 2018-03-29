@@ -19,6 +19,7 @@ public class FastShippingOrder extends DecoratedOrder {
 
     public FastShippingOrder(BaseOrder order) {
         super(order);
+        super.setWeightClass(order.getWeightClass());
         double newPrice = calculateTotalPrice();
         this.setTotalPrice(newPrice);
     }
@@ -43,8 +44,4 @@ public class FastShippingOrder extends DecoratedOrder {
         }
     }
 }
-    /*
-    idea for handling this order option:
-    when a set of oders is set from currentState "received" to currentState "readyToSend". Orders from this type are always put at the front of the queue.
-    This is well combined with the subject "algoritms and datastructures" (in the sense of a sorting algoritm)
-     */
+

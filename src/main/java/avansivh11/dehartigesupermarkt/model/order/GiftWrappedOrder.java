@@ -20,6 +20,7 @@ public class GiftWrappedOrder extends DecoratedOrder {
 
     public GiftWrappedOrder(BaseOrder order) {
         super(order);
+        super.setWeightClass(order.getWeightClass());
         double newPrice = calculateTotalPrice();
         this.setTotalPrice(newPrice);
     }
