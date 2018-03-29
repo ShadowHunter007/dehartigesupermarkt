@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.model.product.Product;
 import avansivh11.dehartigesupermarkt.service.LoggingService;
 import avansivh11.dehartigesupermarkt.service.logging.AbstractLogger;
 import avansivh11.dehartigesupermarkt.service.ProductService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Controller
 public class ProductController {
@@ -38,6 +40,9 @@ public class ProductController {
         AbstractLogger logger = AbstractLogger.getChainOfLoggers(loggingService);
         logger.logMessage(AbstractLogger.WEBSITE, "A visitor is on the homepage.");
         /* ************ Logging - END******************** */
+
+        ArrayList<Product> products = productService.getProducts();
+        model.addAttribute("products", products);
         return "views/product/index";
     }
 }

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 @Service
 public class ProductService {
 
-    @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
     public ProductService(ProductRepository repository) {
         this.productRepository = repository;
     }

@@ -12,37 +12,26 @@
                 <hr/>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
+        <div th:if="${products.empty}" class="row">
+            <div class="col-md-12 text-center">
+                <p>Er zijn geen producten gevonden.</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
-            </div>
-            <div class="col-md-4 text-center productblock">
-                <b>There will be a product here!</b>
+        <div th:if="!${products.empty}" class="row">
+            <div th:each="product : ${products}" class="col-md-3 productblock">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <img th:src="${product.imagePath}" width="150px" height="150px"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p th:text="${product.name}"></p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <p th:text="${product.price}"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
