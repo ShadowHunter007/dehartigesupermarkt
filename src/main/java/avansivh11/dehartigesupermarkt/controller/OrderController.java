@@ -1,6 +1,5 @@
 package avansivh11.dehartigesupermarkt.controller;
 
-import avansivh11.dehartigesupermarkt.model.account.Customer;
 import avansivh11.dehartigesupermarkt.model.order.*;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

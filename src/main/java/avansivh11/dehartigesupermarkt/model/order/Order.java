@@ -1,6 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.order;
 
-import avansivh11.dehartigesupermarkt.model.account.Customer;
+import avansivh11.dehartigesupermarkt.model.account.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,14 +19,14 @@ import java.util.List;
 public class Order extends BaseOrder {
     private double totalPrice;
     @OneToOne
-    private Customer customer;
+    private User customer;
     @OneToOne
     private OrderState currentState;
     private int weightClass;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLine> orderLines;
 
-    public Order(Customer customer, ArrayList<OrderLine> orderLines) {
+    public Order(User customer, ArrayList<OrderLine> orderLines) {
         this.customer = customer;
         this.orderLines = orderLines;
         if(orderLines != null && !orderLines.isEmpty()) {

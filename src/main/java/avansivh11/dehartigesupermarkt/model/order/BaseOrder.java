@@ -1,6 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.order;
 
-import avansivh11.dehartigesupermarkt.model.account.Customer;
+import avansivh11.dehartigesupermarkt.model.account.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public abstract class BaseOrder {
 	protected double totalPrice;
 	@NotNull(message = "Vul een geldige waarde in voor de klant")
 	@OneToOne
-	protected Customer customer;
+	protected User customer;
 	@NotNull(message="Vul een geldige toestand in voor deze bestelling")
 	@OneToOne
 	protected OrderState currentState;
