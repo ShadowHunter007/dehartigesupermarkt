@@ -8,7 +8,7 @@ import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class ProductController {
         this.loggingService = loggingService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index(Model model) {
 
         model.addAttribute("title","Welkom bij de hartige supermarkt.");
@@ -45,4 +45,21 @@ public class ProductController {
         model.addAttribute("products", products);
         return "views/product/index";
     }
+
+    @GetMapping("/products/{id}")
+    public String productSpecification(@PathVariable("id") long id, Model model){
+        Product product = productService.getProduct(id);
+        model.addAttribute("product", product);
+
+        return "views/product/productSpecification";
+    }
+
+    @PostMapping("/shoppingcart")
+    public void shoppingCart(@RequestParam Long id, @RequestParam int quantity){
+        //product id
+        System.out.println(id);
+        //order quantity
+        System.out.println(quantity);
+    }
+
 }

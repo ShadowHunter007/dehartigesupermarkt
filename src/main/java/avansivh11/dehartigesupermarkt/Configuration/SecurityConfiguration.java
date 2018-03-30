@@ -35,13 +35,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("resources/**").permitAll()
+                .antMatchers("/products/{id}").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable()
             .formLogin()
-                .loginPage("/login").successForwardUrl("/")
-                //.defaultSuccessUrl("/")
+                .loginPage("/login").defaultSuccessUrl("/")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
@@ -55,8 +54,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
    @Override
     public void configure(WebSecurity web) {
         web
-                .ignoring()
-                .antMatchers("/webjars/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+            .ignoring()
+            .antMatchers("/webjars/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
 
     @Bean

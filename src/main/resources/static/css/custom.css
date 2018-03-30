@@ -1,6 +1,12 @@
-.productblock{
-    border: 1px solid black;
-}
 .full-width{
     width: 100%;
+}
+.pointer{
+    cursor: pointer;
+}
+.zeromargin{
+    margin: 0;
+}
+.borderright{
+    border-right: 1px solid #ddd;
 }

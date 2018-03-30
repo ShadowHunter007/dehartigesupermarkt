@@ -36,10 +36,15 @@ public class Product {
     @Min(0)
     private double price;
 
-    public Product(String name, String description, String imagePath, double price) {
+    @NotNull(message = "Voorraad is required")
+    @Min(0)
+    private int stock;
+
+    public Product(String name, String description, String imagePath, double price, int stock) {
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
         this.price = price;
+        this.stock = stock;
     }
 }

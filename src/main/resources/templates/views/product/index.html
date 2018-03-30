@@ -18,18 +18,20 @@
             </div>
         </div>
         <div th:if="!${products.empty}" class="row">
-            <div th:each="product : ${products}" class="col-md-3 productblock">
-                <div class="row">
-                    <div class="col-md-12 text-center">
+            <div th:each="product : ${products}" class="col-md-3" th:onclick="'javascript:productSpec(\'' + ${product.id} + '\')'">
+                <div class="panel panel-default pointer">
+                    <div class="panel-body text-center">
                         <img th:src="${product.imagePath}" width="150px" height="150px"/>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <p th:text="${product.name}"></p>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        <p th:text="${product.price}"></p>
+                    <div class="panel-footer panel-default">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p th:text="${product.name}"></p>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <p th:text="'€ ' + ${product.price}"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

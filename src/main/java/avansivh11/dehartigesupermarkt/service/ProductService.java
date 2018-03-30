@@ -21,6 +21,10 @@ public class ProductService {
         return (ArrayList<Product>) this.productRepository.findAll();
     }
 
+    public Product getProduct(long id){
+        return this.productRepository.findOne(id);
+    }
+
     public Product createProduct(Product product) {
         return this.productRepository.save(product);
     }
