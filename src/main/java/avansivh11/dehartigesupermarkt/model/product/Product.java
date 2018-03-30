@@ -29,13 +29,22 @@ public class Product {
     @NotEmpty(message = "Description is required.")
     private String description;
 
+    @NotEmpty(message = "Image is required")
+    private String imagePath;
+
     @NotNull(message = "Price is required.")
     @Min(0)
-    private int price;
+    private double price;
 
-    public Product(String name, String description, int price) {
+    @NotNull(message = "Voorraad is required")
+    @Min(0)
+    private int stock;
+
+    public Product(String name, String description, String imagePath, double price, int stock) {
         this.name = name;
         this.description = description;
+        this.imagePath = imagePath;
         this.price = price;
+        this.stock = stock;
     }
 }
