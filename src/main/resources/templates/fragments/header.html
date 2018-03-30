@@ -28,11 +28,6 @@
                     <li th:if="${#httpServletRequest.remoteUser} == null"><a href="/login">Log in</a></li>
                     <li th:if="${#httpServletRequest.remoteUser} != null"><a th:text="${#httpServletRequest.remoteUser}" href="/profile"></a></li>
                     <li th:if="${#httpServletRequest.remoteUser} != null"><a href="/logout">Log uit</a></li>
-
-                    <!--<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>-->
-                    <!--<form th:action="@{/logout}" method="post">-->
-                        <!--<input type="submit" value="Sign Out"/>-->
-                    <!--</form>-->
                 </ul>
             </div>
         </div>
