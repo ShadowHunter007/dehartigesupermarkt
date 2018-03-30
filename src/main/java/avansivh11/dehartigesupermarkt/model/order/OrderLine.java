@@ -9,6 +9,9 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 @Entity
 @Getter
@@ -32,19 +35,16 @@ public class OrderLine {
     @NotNull(message = "Er moet een hoeveelheid ingevuld zijn")
     private int amount;
 
-    @NotNull(message = "Vul een btw percentage in")
-    private int vatPercentage;
-
-    public OrderLine(Product product, int amount, int vatPercentage) {
+    public OrderLine(Product product, int amount) {
         this.product = product;
         this.amount = amount;
-        this.vatPercentage = vatPercentage;
         this.totalPrice = product.getPrice() * amount;
     }
 
     public double getTotalPriceExVat() {
-        double divisor = vatPercentage / 100 + 1;
-        double priceExVat = totalPrice / divisor;
-        return priceExVat;
+        BigDecimal totalPrice = new BigDecimal(product.getTotalPriceExVat() * amount);
+        //correctly round the double to two decimals
+        totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
+        return totalPrice.doubleValue();
     }
 }

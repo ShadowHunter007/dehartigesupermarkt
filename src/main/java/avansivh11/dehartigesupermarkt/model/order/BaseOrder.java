@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,4 +38,7 @@ public abstract class BaseOrder {
 	protected List<OrderLine> orderLines;
 
 	public abstract double calculateTotalPrice();
+
+	//needs to be overridden
+	public double getExVatTotalPrice() { return	0; }
 }
