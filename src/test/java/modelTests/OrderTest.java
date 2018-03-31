@@ -8,18 +8,23 @@ import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class OrderTest {
     @MockBean
     private User customer;
-    private ArrayList<OrderLine> orderLines = new ArrayList<>();
+    private List<OrderLine> orderLines = new ArrayList<>();
 
     public OrderTest() {
-        orderLines.add(new OrderLine(new Product("product1", "description1", null, 2.5, 100, 6), 5));
-        orderLines.add(new OrderLine(new Product("product2", "description2", null, 4, 25, 6), 1));
-        orderLines.add(new OrderLine(new Product("product3", "description3", null, 10, 10, 6), 3));
+        Product product1 = new Product("product1", "description1", null, 2.5, 100, 6);
+        Product product2 = new Product("product2", "description2", null, 4, 25, 6);
+        Product product3 = new Product("product3", "description3", null, 10, 10, 6);
+
+        orderLines.add(new OrderLine(product1, 5));
+        orderLines.add(new OrderLine(product2, 1));
+        orderLines.add(new OrderLine(product3, 3));
     }
 
     //for a normal order
@@ -103,14 +108,17 @@ public class OrderTest {
     }
 
     private void add2OrderLines() {
-        orderLines.add(new OrderLine(new Product("product3", "description3", null, 2.5, 10, 6), 4));
-        orderLines.add(new OrderLine(new Product("product4", "description4", null, 2.5, 10, 6), 4));
+        Product product4 = new Product("product4", "description3", null, 2.5, 10, 6);
+        Product product5 = new Product("product5", "description4", null, 2.5, 10, 6);
+
+        orderLines.add(new OrderLine(product4, 4));
+        orderLines.add(new OrderLine(product5, 4));
     }
 
     private void add5OrderLines() {
         add2OrderLines();
-        orderLines.add(new OrderLine(new Product("product3", "description3", null, 1, 10, 6), 10));
-        orderLines.add(new OrderLine(new Product("product4", "description4", null, 2, 10, 6), 10));
-        orderLines.add(new OrderLine(new Product("product3", "description3", null, 1, 10, 6), 5));
+        orderLines.add(new OrderLine(new Product("product6", "description3", null, 1, 10, 6), 10));
+        orderLines.add(new OrderLine(new Product("product7", "description4", null, 2, 10, 6), 10));
+        orderLines.add(new OrderLine(new Product("product8", "description3", null, 1, 10, 6), 5));
     }
 }

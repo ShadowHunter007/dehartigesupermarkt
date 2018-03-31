@@ -1,10 +1,11 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.order.*;
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,22 +26,16 @@ public class OrderController {
         this.service = service;
     }
 
-    //cannot be implemented yet
-    /*@PostMapping("/")
+    @PostMapping("/")
     public ModelAndView createOrder(
-            @RequestParam(value="shoppingcart", required=true) ShoppingCart shoppingCart
+            @RequestParam(value="shoppingcart") ShoppingCart shoppingCart
     ) {
-        BaseOrder order = new Order(shoppingCart.getCustomer(), shoppingCart.getOrderLines());
+        ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
+        BaseOrder order = new Order(shoppingCart.getCustomer(), orderLines);
         service.saveOrder(order);
-        return new ModelAndView(ORDER_VIEW, "order", order);
-    }*/
 
-    //after creating order (by clicking on the next/confirm button on shoppingcart view) this method is called with the newly created order
-    /*@GetMapping("/view")
-    public ModelAndView getOrderView(BaseOrder order) {
-        this.currentOrder = order;
         return new ModelAndView(ORDER_VIEW, "order", order);
-    }*/
+    }
 
     @PutMapping("/{id}")
     public ModelAndView extraOptionsSubmit(
@@ -73,9 +68,9 @@ public class OrderController {
 
     private BaseOrder decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount, BaseOrder currentOrder) {
         if(currentOrder != null) {
-            if (fastShipping) {
-                FastShippingOrder fastShippingOrder = new FastShippingOrder(currentOrder);
-                currentOrder = fastShippingOrder;
+            if (discount) {
+                DiscountOrder discountOrder = new DiscountOrder(currentOrder);
+                currentOrder = discountOrder;
             }
 
             if (giftWrapped) {
@@ -83,9 +78,9 @@ public class OrderController {
                 currentOrder = giftWrappedOrder;
             }
 
-            if (discount) {
-                DiscountOrder discountOrder = new DiscountOrder(currentOrder);
-                currentOrder = discountOrder;
+            if (fastShipping) {
+                FastShippingOrder fastShippingOrder = new FastShippingOrder(currentOrder);
+                currentOrder = fastShippingOrder;
             }
         }
         return currentOrder;
