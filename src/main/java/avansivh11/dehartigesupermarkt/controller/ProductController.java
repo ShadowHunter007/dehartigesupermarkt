@@ -1,11 +1,16 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.Security.AuthenticationFacade;
+import avansivh11.dehartigesupermarkt.Security.CurrentUser;
+import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.product.Product;
 import avansivh11.dehartigesupermarkt.service.LoggingService;
 import avansivh11.dehartigesupermarkt.service.logging.AbstractLogger;
 import avansivh11.dehartigesupermarkt.service.ProductService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +24,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final LoggingService loggingService;
+    private final CurrentUser currentUser;
 
     @Autowired
-    public ProductController(ProductService productService, LoggingService loggingService) {
+    public ProductController(ProductService productService, LoggingService loggingService, CurrentUser currentUser) {
         this.productService = productService;
         this.loggingService = loggingService;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/")
@@ -48,6 +55,8 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public String productSpecification(@PathVariable("id") long id, Model model){
+        //this is how to get the current user
+        User user = currentUser.getCurrentUser();
         Product product = productService.getProduct(id);
         model.addAttribute("product", product);
 
