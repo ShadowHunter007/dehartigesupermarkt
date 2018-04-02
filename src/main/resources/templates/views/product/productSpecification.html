@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 th:text="${product.name}" class="zeromargin"></h1>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <h1 th:text="${product.stock} + ' op voorraad'" class="zeromargin"></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" id="body">
+                    <div class="row">
+                        <div class="col-md-5 borderright">
+                            <img th:src="${product.imagePath}" class="image-responsive center-block" height="400px"/>
+                        </div>
+                        <div class="col-md-7" style="height:100%;">
+                            <p th:text="${product.description}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 th:text="'€ ' + ${product.price}" class="zeromargin"></h2>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <form class="form-inline" action="#" th:action="@{/shoppingcart}" th:object="${product}" method="POST">
+                                <input type="hidden" th:field="${product.id}"/>
+                                <div class="form-group">
+                                    <label for="quantity">Aantal</label>
+                                    <input type="number" class="form-control" name="quantity" id="quantity" min="1" th:max="${product.stock}"/>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Voeg toe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div th:replace="fragments/footer :: footer"></div>
+</footer>
+</body>
+</html>

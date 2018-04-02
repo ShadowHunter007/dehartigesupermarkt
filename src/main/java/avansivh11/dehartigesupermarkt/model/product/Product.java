@@ -29,13 +29,33 @@ public class Product {
     @NotEmpty(message = "Description is required.")
     private String description;
 
+    @NotEmpty(message = "Image is required")
+    private String imagePath;
+
     @NotNull(message = "Price is required.")
     @Min(0)
-    private int price;
+    private double price;
 
-    public Product(String name, String description, int price) {
+    @NotNull(message = "Voorraad is required")
+    @Min(0)
+    private int stock;
+
+    @NotNull(message = "Vat percentage is required.")
+    @Min(0)
+    private int vatPercentage;
+
+    public Product(String name, String description, String imagePath, double price, int stock, int vatPercentage) {
         this.name = name;
         this.description = description;
+        this.imagePath = imagePath;
         this.price = price;
+        this.stock = stock;
+        this.vatPercentage = vatPercentage;
+    }
+
+    public double getTotalPriceExVat() {
+        double divisor = (Double.parseDouble(String.valueOf(vatPercentage)) / 100) + 1;
+        double priceExVat = price / divisor;
+        return priceExVat;
     }
 }

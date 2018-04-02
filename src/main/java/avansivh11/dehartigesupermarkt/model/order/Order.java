@@ -1,49 +1,70 @@
 package avansivh11.dehartigesupermarkt.model.order;
 
-import avansivh11.dehartigesupermarkt.model.product.Product;
+import avansivh11.dehartigesupermarkt.model.account.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Table(name="Orders")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
+@ToString
 public class Order extends BaseOrder {
-
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
+    private double totalPrice;
+    @OneToOne
+    private User customer;
+    @OneToOne
+    private OrderState currentState;
+    private int weightClass;
     @OneToMany(cascade = CascadeType.ALL)
-    protected List<Product> orderItems = new ArrayList<>();
+    private List<OrderLine> orderLines;
 
-    public void add(Product p) {
-        orderItems.add(p);
+    public Order(User customer, List<OrderLine> orderLines) {
+        this.customer = customer;
+        this.orderLines = orderLines;
+        if(orderLines != null && !orderLines.isEmpty()) {
+            //calculate totalPrice
+            totalPrice = calculateTotalPrice();
+            //calculate weightclass
+            weightClass = calculateWeightClass();
+        }
+        currentState = new OrderReceived(this);
     }
 
     @Override
-    public int price() {
-        int price = 0;
-        for(Product item : orderItems) {
-            price += item.getPrice();
+    public double calculateTotalPrice() {
+        double totalPrice = 0;
+        for(OrderLine orderLine : orderLines) {
+            totalPrice = totalPrice + orderLine.getTotalPrice();
         }
-        return price;
+        return totalPrice;
     }
 
-    @Override
-    public String toString() {
-        String s = "";
-        for (Product item : orderItems) {
-            s += "product: " + item.getName() + "; ";
+    public double getExVatTotalPrice() {
+        double totalPriceExVat = 0;
+        for(OrderLine orderLine : orderLines) {
+            totalPriceExVat = totalPriceExVat + orderLine.getTotalPriceExVat();
         }
-        return s;
+        return totalPriceExVat;
+    }
+
+    private int calculateWeightClass() {
+        int orderLineCount = orderLines.size();
+        int weightClass = 0;
+        if(orderLineCount > 0 && orderLineCount < 4) {
+            return weightClass = 1;
+        } else if(orderLineCount >= 4 && orderLineCount < 7) {
+            return weightClass = 2;
+        } else if(orderLineCount <= 0) {
+            throw new java.util.EmptyStackException();
+        } else {
+            return weightClass = 3;
+        }
     }
 }

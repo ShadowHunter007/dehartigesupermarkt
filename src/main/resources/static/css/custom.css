@@ -1,0 +1,26 @@
+.full-width{
+    width: 100%;
+}
+.pointer{
+    cursor: pointer;
+}
+.zeromargin{
+    margin: 0;
+}
+.marginbot20{
+    margin-bottom: 20px;
+}
+.paddingleft15{
+    padding-left: 15px;
+}
+.borderright{
+    border-right: 1px solid #ddd;
+}
+.footer{
+    font-size: 0.8em;
+    background-color: white;
+}
+.hrmarge{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

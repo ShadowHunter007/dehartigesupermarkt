@@ -24,7 +24,10 @@
                     <!--<li><a href="#">Link</a></li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/login">Login</a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null"><a href="/logging/log">Log</a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} == null"><a href="/login">Log in</a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null"><a th:text="${#httpServletRequest.remoteUser}" href="/profile"></a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null"><a href="/logout">Log uit</a></li>
                 </ul>
             </div>
         </div>

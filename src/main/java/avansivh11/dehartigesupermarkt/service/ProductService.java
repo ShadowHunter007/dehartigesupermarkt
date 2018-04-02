@@ -10,15 +10,19 @@ import java.util.ArrayList;
 @Service
 public class ProductService {
 
-    @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
     public ProductService(ProductRepository repository) {
         this.productRepository = repository;
     }
 
     public ArrayList<Product> getProducts() {
         return (ArrayList<Product>) this.productRepository.findAll();
+    }
+
+    public Product getProduct(long id){
+        return this.productRepository.findOne(id);
     }
 
     public Product createProduct(Product product) {

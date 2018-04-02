@@ -15,23 +15,19 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @ToString
-public class OrderOption extends DecoratedOrder {
+public class GiftWrappedOrder extends DecoratedOrder {
+    private double giftWrapPrice = 3.50;
 
-    @NotEmpty(message = "Name may not be empty.")
-    private String name;
-
-    @NotNull(message = "Price is required.")
-    @Min(0)
-    private int price = 0;
-
-    public OrderOption(String name, int price, BaseOrder order) {
+    public GiftWrappedOrder(BaseOrder order) {
         super(order);
-        this.name = name;
-        this.price = price;
+        super.setWeightClass(order.getWeightClass());
+        double newPrice = calculateTotalPrice();
+        this.setTotalPrice(newPrice);
     }
 
     @Override
-    public int price() {
-        return price + order.price();
+    public double calculateTotalPrice() {
+        double newPrice = order.getTotalPrice() + giftWrapPrice;
+        return newPrice;
     }
 }
