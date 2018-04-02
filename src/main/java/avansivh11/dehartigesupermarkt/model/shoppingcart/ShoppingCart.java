@@ -15,7 +15,7 @@ import java.util.HashMap;
 @Setter
 @ToString
 public class ShoppingCart {
-    private HashMap<String, OrderLine> orderLines;
+    private HashMap<String, OrderLine> orderLines = new HashMap<>();
     private User customer;
 
     public void add(Product product, int amount) {
@@ -25,6 +25,9 @@ public class ShoppingCart {
         if(orderLines.get(product.getName()) == null) {
             OrderLine orderLine = new OrderLine(product, amount);
             orderLines.put(product.getName(), orderLine);
+            //invert amount - product stock needs to go down
+            amount = amount*-1;
+            updateProductStock(product, amount);
         } else {
             OrderLine targetOrderLine = orderLines.get(product.getName());
             changeAmount(targetOrderLine, amount);
@@ -51,6 +54,8 @@ public class ShoppingCart {
 
     private void changeAmount(OrderLine orderLine, int change) {
         orderLine.setAmount(orderLine.getAmount() + change);
+        //if the change is positive it affects the stock negatively - so invert
+        change = change*-1;
         updateProductStock(orderLine.getProduct(), change);
     }
 

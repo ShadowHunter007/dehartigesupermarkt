@@ -18,7 +18,7 @@ public class ShoppingCartTest {
         //testdata
         Product product1 = new Product("product1", "description1", null, 25, 10, 6);
         Product product2 = new Product("product2", "description2", null, 3.2, 20, 6);
-        Product product3 = new Product("product3", "description3", null, 1.87, 10, 6));
+        Product product3 = new Product("product3", "description3", null, 1.87, 10, 6);
         //add
         shoppingCart.add(product1, 5);
         shoppingCart.add(product2, 3);
@@ -50,7 +50,7 @@ public class ShoppingCartTest {
         shoppingCart = new ShoppingCart();
         //testdata
         Product product1 = new Product("product1", "description1", null, 25, 10, 6);
-        Product product2 = new Product("product3", "description3", null, 1.87, 10, 6));
+        Product product2 = new Product("product3", "description3", null, 1.87, 10, 6);
         //add
         shoppingCart.add(product1, 5);
         shoppingCart.add(product1, 3);
@@ -70,9 +70,9 @@ public class ShoppingCartTest {
         assertEquals(expected1, result1);
         assertEquals(expected2, result2);
         //assert the product stock
-        assertEquals(2, result1);
-        assertEquals(9, result2);
+        assertEquals(2, result3);
+        assertEquals(9, result4);
     }
 
-    //test with amount == 0 
+    //test with amount == 0
 }

@@ -17,9 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/shoppingcart")
 public class ShoppingCartController {
     private final String SHOPPINGCART_VIEW = "views/shoppingcart/shoppingcart_view.html";
-    private final Authentication loggedInUser;
 
-    @Autowired
+    /*@Autowired
     private final ShoppingCartService service;
 
     public ShoppingCartController(ShoppingCartService service) {
@@ -75,5 +74,5 @@ public class ShoppingCartController {
     ) {
         ShoppingCart newShoppingCart = service.changeMemento(Integer.parseInt(index));
         //also return the current index of the mementolist
-    }
+    }*/
 }
