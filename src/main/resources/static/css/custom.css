@@ -17,10 +17,18 @@
     border-right: 1px solid #ddd;
 }
 .footer{
+    position: absolute;
+    width: 100%;
+    height: 60px;
     font-size: 0.8em;
     background-color: white;
 }
 .hrmarge{
     margin-top: 5px;
     margin-bottom: 5px;
+}
+.imageprop{
+    width: auto;
+    max-width: 100%;
+    max-height: 400px;
 }
