@@ -20,6 +20,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Lazy
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Lazy
     @Autowired
     private UserDetailsService userDetailsService;
 
