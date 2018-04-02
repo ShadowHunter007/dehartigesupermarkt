@@ -1,6 +1,5 @@
 package avansivh11.dehartigesupermarkt.controller;
 
-import avansivh11.dehartigesupermarkt.model.account.Role;
 import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,6 @@ public class LoginController {
 
     @PostMapping(value = "registration")
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-        loginService.createRole(new Role("CUSTOMER"));
         ModelAndView modelAndView = new ModelAndView();
         User userExists = loginService.findUserByEmail(user.getEmail());
         if (userExists != null) {
