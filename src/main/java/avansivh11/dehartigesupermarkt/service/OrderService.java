@@ -94,4 +94,12 @@ public class OrderService {
 
         return orders;
     }
+
+    public ArrayList<OrderLine> convertOrderLines(HashMap<String, OrderLine> orderLines) {
+        ArrayList<OrderLine> orderLineList = new ArrayList<>();
+        for(String productName : orderLines.keySet()) {
+            orderLineList.add(orderLines.get(productName));
+        }
+        return orderLineList;
+    }
 }

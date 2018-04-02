@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Table(name="Orders")
@@ -26,7 +25,7 @@ public class Order extends BaseOrder {
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLine> orderLines;
 
-    public Order(User customer, ArrayList<OrderLine> orderLines) {
+    public Order(User customer, List<OrderLine> orderLines) {
         this.customer = customer;
         this.orderLines = orderLines;
         if(orderLines != null && !orderLines.isEmpty()) {
