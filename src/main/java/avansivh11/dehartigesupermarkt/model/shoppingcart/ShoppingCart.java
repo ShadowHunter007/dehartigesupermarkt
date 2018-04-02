@@ -16,18 +16,19 @@ import java.util.HashMap;
 @ToString
 public class ShoppingCart {
     private HashMap<String, OrderLine> orderLines = new HashMap<>();
-    private User customer;
 
     public void add(Product product, int amount) {
         if(product == null) { throw new java.lang.IllegalArgumentException(); }
         assert amount > 0;
         //check if the current product is already in an orderline (check by name)
         if(orderLines.get(product.getName()) == null) {
+            //invert amount - product stock needs to go down
+            int amountChange = amount*-1;
+            updateProductStock(product, amountChange);
+
+            //construct the orderline
             OrderLine orderLine = new OrderLine(product, amount);
             orderLines.put(product.getName(), orderLine);
-            //invert amount - product stock needs to go down
-            amount = amount*-1;
-            updateProductStock(product, amount);
         } else {
             OrderLine targetOrderLine = orderLines.get(product.getName());
             changeAmount(targetOrderLine, amount);
@@ -48,19 +49,22 @@ public class ShoppingCart {
             orderLines.remove(product.getName());
         } else {
             amount = amount*-1;
+            assert amount < 0;
             changeAmount(orderLine, amount);
         }
     }
 
     private void changeAmount(OrderLine orderLine, int change) {
-        orderLine.setAmount(orderLine.getAmount() + change);
         //if the change is positive it affects the stock negatively - so invert
-        change = change*-1;
-        updateProductStock(orderLine.getProduct(), change);
+        int invertChange = change * -1;
+        updateProductStock(orderLine.getProduct(), invertChange);
+        //now update the amount of the orderline
+        orderLine.setAmount(orderLine.getAmount() + change);
     }
 
     private void updateProductStock(Product product, int change) {
         product.setStock(product.getStock() + change);
+        assert product.getStock() >= 0;
     }
 }
 

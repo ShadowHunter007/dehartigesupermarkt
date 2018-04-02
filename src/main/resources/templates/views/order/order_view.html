@@ -13,9 +13,8 @@
             <h4 th:text="Bestelling voor: ${order.customer.username}"/>
             <h4 th:text="Bestelnummer: ${order.id}"/>
             <h4 th:text="Gewichtsklasse: ${order.weightClass}"/>
-            <!-- nog niet gïmplementeerd -->
-            <h4 th:text="Bezorgadres: ${order.customer.address}"/>
-            <!-- ----------------------- -->
+            <h4 th:text="Naam klant: ${order.customer.username}"/>
+            <h4 th:text="E-mail klant: ${order.customer.email}"/>
         </div>
     </div>
     <div class="row">
@@ -45,7 +44,7 @@
         <!-- add second optional table for extra order options -->
     <div class="row">
         <div class="col-xs-12">
-            <form action="#" th:action="@{/order/confirm}" method="post">
+            <form action="#" th:action="@{/orders/id}" method="put">
                 <div th:switch="${order.weightClass}">
                     <p th:case="1">Snelle verzending: € 5,00</p>
                     <p th:case="2">Snelle verzending: € 8,00</p>

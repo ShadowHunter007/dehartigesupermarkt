@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.order.*;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
@@ -16,14 +17,17 @@ import java.util.ArrayList;
 public class OrderController {
     private final String ORDER_VIEW = "views/order/order_view.html";
     private final String ORDER_SUCCESS = "views/order/success.html";
+    private final String ORDER_FAIL = "views/order/failed.html";
     private final String ORDER_STATUS = "views/order/order_status_view.html";
     private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview.html";
+    private final CurrentUser currentUser;
 
     @Autowired
     private final OrderService service;
 
-    public OrderController(OrderService service) {
+    public OrderController(OrderService service, CurrentUser currentUser) {
         this.service = service;
+        this.currentUser = currentUser;
     }
 
     @PostMapping("/")
@@ -31,10 +35,15 @@ public class OrderController {
             @RequestParam(value="shoppingcart") ShoppingCart shoppingCart
     ) {
         ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
-        BaseOrder order = new Order(shoppingCart.getCustomer(), orderLines);
-        service.saveOrder(order);
+        if(currentUser != null) {
+            User customer = currentUser.getCurrentUser();
+            BaseOrder order = new Order(customer, orderLines);
+            service.saveOrder(order);
 
-        return new ModelAndView(ORDER_VIEW, "order", order);
+            return new ModelAndView(ORDER_VIEW, "order", order);
+        } else {
+            return new ModelAndView(ORDER_FAIL, "shoppingcart", shoppingCart);
+        }
     }
 
     @PutMapping("/{id}")
@@ -68,6 +77,7 @@ public class OrderController {
 
     private BaseOrder decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount, BaseOrder currentOrder) {
         if(currentOrder != null) {
+            //the order of the wrappings is important
             if (discount) {
                 DiscountOrder discountOrder = new DiscountOrder(currentOrder);
                 currentOrder = discountOrder;

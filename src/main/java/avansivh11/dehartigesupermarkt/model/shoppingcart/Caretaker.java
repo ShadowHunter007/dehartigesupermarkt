@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.shoppingcart;
 
+import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import com.sun.management.VMOption;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +18,15 @@ public class Caretaker{
         this.mementos = new ArrayList<>();
     }
 
-    public void addMemento(Memento m) {
+    public void addMementoAtTail(Memento m) {
         mementos.add(m);
     }
 
     public Memento getMemento(int index) {
         return mementos.get(index);
+    }
+
+    public void removeMemento(int index) {
+        mementos.remove(index);
     }
 }

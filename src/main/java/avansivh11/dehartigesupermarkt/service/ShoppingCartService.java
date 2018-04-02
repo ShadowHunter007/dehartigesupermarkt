@@ -29,15 +29,6 @@ public class ShoppingCartService {
 
     public void updateMemento(ShoppingCart shoppingCart) {
         originator.setShoppingCartState(shoppingCart);
-        caretaker.addMemento(originator.save());
-    }
-
-    public ShoppingCart changeMemento(int index) {
-        Memento mementoToRestore = caretaker.getMemento(index);
-        originator.restore(mementoToRestore);
-        //update user -> shoppingcart
-        ShoppingCart newShoppingCart = mementoToRestore.getShoppingCartState();
-
-        return newShoppingCart;
+        caretaker.addMementoAtTail(originator.save());
     }
 }
