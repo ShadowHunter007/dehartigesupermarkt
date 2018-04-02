@@ -2,7 +2,7 @@ package avansivh11.dehartigesupermarkt.service.logging;
 
 public class ConsoleLogger extends AbstractLogger {
 
-    ConsoleLogger(int level){
+    public ConsoleLogger(int level){
         this.level = level;
     }
 

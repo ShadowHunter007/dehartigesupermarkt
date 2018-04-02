@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class FileLogger extends AbstractLogger {
 
-    FileLogger(int level){
+    public FileLogger(int level){
         this.level = level;
     }
 

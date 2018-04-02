@@ -7,7 +7,7 @@ public class WebsiteLogger extends AbstractLogger {
 
     private final LoggingService loggingService;
 
-    WebsiteLogger(int level, LoggingService loggingService){
+    public WebsiteLogger(int level, LoggingService loggingService){
         this.level = level;
         this.loggingService = loggingService;
     }

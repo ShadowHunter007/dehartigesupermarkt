@@ -8,9 +8,9 @@ public abstract class AbstractLogger {
     public static int WEBSITE = 3;
 
     int level;
-    private AbstractLogger nextLogger;
+    public AbstractLogger nextLogger;
 
-    private void setNextLogger(AbstractLogger nextLogger){
+    public void setNextLogger(AbstractLogger nextLogger){
         this.nextLogger = nextLogger;
     }
 
