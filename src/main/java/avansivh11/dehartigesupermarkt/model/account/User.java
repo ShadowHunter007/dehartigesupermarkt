@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.account;
 
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,10 @@ public class User{
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    //do not make persistent
+    @Transient
+    private ShoppingCart shoppingCart = new ShoppingCart();
 
     public boolean isActive() {
         return active;
