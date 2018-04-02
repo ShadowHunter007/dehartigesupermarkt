@@ -40,11 +40,22 @@ public class Product {
     @Min(0)
     private int stock;
 
-    public Product(String name, String description, String imagePath, double price, int stock) {
+    @NotNull(message = "Vat percentage is required.")
+    @Min(0)
+    private int vatPercentage;
+
+    public Product(String name, String description, String imagePath, double price, int stock, int vatPercentage) {
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
         this.price = price;
         this.stock = stock;
+        this.vatPercentage = vatPercentage;
+    }
+
+    public double getTotalPriceExVat() {
+        double divisor = (Double.parseDouble(String.valueOf(vatPercentage)) / 100) + 1;
+        double priceExVat = price / divisor;
+        return priceExVat;
     }
 }
