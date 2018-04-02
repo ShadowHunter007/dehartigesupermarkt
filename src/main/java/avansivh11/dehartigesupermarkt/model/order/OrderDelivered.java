@@ -16,6 +16,7 @@ public class OrderDelivered extends OrderState {
 
     public OrderDelivered(BaseOrder context) {
         super(context);
+        this.setStatusName("Delivered");
     }
 
     @Override

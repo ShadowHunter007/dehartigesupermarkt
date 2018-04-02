@@ -32,10 +32,10 @@
                 <tbody>
                 <tr th:each="orderLine : ${order.orderLines}">
                     <td th:text="${order.orderLine.id}"></td>
-                    <td th:text="${order.orderLine.name}"></td>
-                    <td th:text="${order.orderLine.description}"></td>
+                    <td th:text="${order.orderLine.product.name}"></td>
+                    <td th:text="${order.orderLine.product.description}"></td>
                     <td th:text="${order.orderLine.amount}"></td>
-                    <td th:text="${order.orderLine.price}"></td>
+                    <td th:text="${order.orderLine.product.price}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -55,14 +55,13 @@
                     <p>Bezorgen in verrassingsmand: € 3,50</p>
                     <input type="checkbox" name="giftWrapped" value="0"/><br/>
                     <p>Als u deze optie aanvinkt, dan wordt uw bestelling in een leuke verrassingsmand gebracht, ideaal voor als u een mandje met boodschappen wil samenstellen voor iemand als verrassing</p>
-                <p>Vul hier een eventuele kortingscode in die aan dit account is gekoppeld</p>
-                <input type="text" name="discount" value=""/><br/>
-                <p>*Kortingscodes werken alleen als ze nog geldig zijn en aan het ingelogde account zijn gekoppeld</p>
+                <p>Als u deze optie aanvinkt, dan krijgt u korting over uw bestelling (standaardkortingen zijn 10% over uw totaalbedrag)</p>
+                <input type="checkbox" name="discount" value=""/><br/>
             `   <button type="submit" value="Confirm order" class="btn btn-success">Bestelling bevestigen</button>
             </form>
         </div>
         <div class="row">
-            <h4 th:text="Totaalprijs excl. btw: ${order.getTotalPriceExVat()}"></h4>
+            <h4 th:text="Totaalprijs excl. btw: ${order.getExVatTotalPrice()}"></h4>
             <h4 th:text="Totaalprijs incl. btw: ${order.totalPrice}"></h4>
         </div>
     </div>

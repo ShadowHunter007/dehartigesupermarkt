@@ -16,10 +16,10 @@ import java.util.ArrayList;
 @RequestMapping(value = "/orders")
 public class OrderController {
     private final String ORDER_VIEW = "views/order/order_view.html";
-    private final String ORDER_SUCCESS = "views/order/success.html";
-    private final String ORDER_FAIL = "views/order/failed.html";
-    private final String ORDER_STATUS = "views/order/order_status_view.html";
+    private final String ORDER_SUCCESS = "views/order/order_success_view.html";
+    private final String ORDER_STATUS = "views/order/order_statu_view.html";
     private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview.html";
+    private final String LOGIN_VIEW = "views/login/login.html";
     private final CurrentUser currentUser;
 
     @Autowired
@@ -34,15 +34,16 @@ public class OrderController {
     public ModelAndView createOrder(
             @RequestParam(value="shoppingcart") ShoppingCart shoppingCart
     ) {
-        ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
-        if(currentUser != null) {
-            User customer = currentUser.getCurrentUser();
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
             BaseOrder order = new Order(customer, orderLines);
             service.saveOrder(order);
 
             return new ModelAndView(ORDER_VIEW, "order", order);
-        } else {
-            return new ModelAndView(ORDER_FAIL, "shoppingcart", shoppingCart);
         }
     }
 
@@ -53,14 +54,20 @@ public class OrderController {
         @RequestParam(value="giftWrapped", required=false) boolean giftWrapped,
         @RequestParam(value="discount", required=false) boolean discount
     ) {
-        //get the right order from the db
-        BaseOrder order = service.getOrderById(Long.parseLong(id));
-        //updates currentOrder automatically
-        order = decorateOrder(fastShipping, giftWrapped, discount, order);
-        //update in the database
-        service.saveOrder(order);
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            //get the right order from the db
+            BaseOrder order = service.getOrderById(Long.parseLong(id));
+            //updates currentOrder automatically
+            order = decorateOrder(fastShipping, giftWrapped, discount, order);
+            //update in the database
+            service.saveOrder(order);
 
-        return new ModelAndView(ORDER_SUCCESS, "order", order);
+            return new ModelAndView(ORDER_SUCCESS, "order", order);
+        }
     }
 
     @GetMapping("/{id}/status")
@@ -71,8 +78,15 @@ public class OrderController {
 
     @GetMapping("/status")
     public ModelAndView showOrderStatusOverview() {
-        ArrayList<BaseOrder> orders = service.getOrders();
-        return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            ArrayList<BaseOrder> orders = service.getOrders();
+            return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
+        }
+
     }
 
     private BaseOrder decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount, BaseOrder currentOrder) {
@@ -94,5 +108,10 @@ public class OrderController {
             }
         }
         return currentOrder;
+    }
+
+    private User checkUserLogin() {
+        User customer = currentUser.getCurrentUser();
+        return customer;
     }
 }

@@ -38,7 +38,13 @@ public class ShoppingCartController {
 
     @GetMapping(value = "/")
     public ModelAndView showShoppingCart() {
-        return new ModelAndView(SHOPPINGCART_VIEW, "shoppingcart", service.getShoppingCart());
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            return new ModelAndView(SHOPPINGCART_VIEW, "shoppingcart", service.getShoppingCart());
+        }
     }
 
     //call when new product has been added

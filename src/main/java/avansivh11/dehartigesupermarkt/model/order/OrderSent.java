@@ -16,6 +16,7 @@ public class OrderSent extends OrderState {
 
     public OrderSent(BaseOrder context) {
         super(context);
+        this.setStatusName("Sent");
     }
 
     @Override
