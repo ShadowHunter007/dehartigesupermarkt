@@ -3,6 +3,10 @@ package avansivh11.dehartigesupermarkt.controller;
 import avansivh11.dehartigesupermarkt.Security.AuthenticationFacade;
 import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import avansivh11.dehartigesupermarkt.model.account.User;
+import avansivh11.dehartigesupermarkt.model.pdf.BasePdf;
+import avansivh11.dehartigesupermarkt.model.pdf.DeliveryNotePdf;
+import avansivh11.dehartigesupermarkt.model.pdf.InvoicePdf;
+import avansivh11.dehartigesupermarkt.model.pdf.OrderHistoryPdf;
 import avansivh11.dehartigesupermarkt.model.product.Product;
 import avansivh11.dehartigesupermarkt.service.LoggingService;
 import avansivh11.dehartigesupermarkt.service.logging.AbstractLogger;
@@ -34,14 +38,18 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model) throws DocumentException, ParserConfigurationException, IOException {
 
         model.addAttribute("title","Welkom bij de hartige supermarkt.");
 
-        /* ************* PDF ******************* */
+        /* ************* PDF *******************
         //BasePdf basePdf = new InvoicePdf();
         //basePdf.buildPDF();
-         /* ************ PDF - END******************** */
+        //BasePdf basePdf2 = new OrderHistoryPdf();
+        //basePdf2.buildPDF();
+        //BasePdf basePdf3 = new DeliveryNotePdf();
+        //basePdf3.buildPDF();
+        /* ************ PDF - END******************** */
 
         /* ************* Logging ******************* */
         AbstractLogger logger = AbstractLogger.getChainOfLoggers(loggingService);

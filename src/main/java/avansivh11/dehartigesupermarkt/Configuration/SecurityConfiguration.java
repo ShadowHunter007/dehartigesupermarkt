@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.Configuration;
 
+import avansivh11.dehartigesupermarkt.Security.LoginCounterFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        //http.addFilterAfter(new LoginCounterFilter(), LoginCounterFilter.class);
         http.
             authorizeRequests()
                 .antMatchers("/").permitAll()
