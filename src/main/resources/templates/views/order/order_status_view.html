@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
     <div class = "container-fluid">
@@ -9,23 +9,23 @@
                 <table class="table table-hover">
                    <tr>
                        <td><strong>Bestellingsnummer:</strong></td>
-                       <td th:text="{$order.id}"></td>
+                       <td th:text="${order.id}"></td>
                    </tr>
                     <tr>
                         <td><strong>Gebruikersnaam klant:</strong></td>
-                        <td th:text="{$order.customer.username}"></td>
+                        <td th:text="${order.customer.username}"></td>
                     </tr>
                     <tr>
                         <td><strong>E-mail klant:</strong></td>
-                        <td th:text="{$order.customer.email}"></td>
+                        <td th:text="${order.customer.email}"></td>
                     </tr>
                     <tr>
                         <td><strong>Totaalprijs bestelling:</strong></td>
-                        <td th:text="{$order.customer.totalPrice}"></td>
+                        <td th:text="${order.customer.totalPrice}"></td>
                     </tr>
                     <tr>
                         <td><strong>Status bestelling:</strong></td>
-                        <td th:text="{$order.currentState.statusName}"></td>
+                        <td th:text="${order.currentState.statusName}"></td>
                     </tr>
                 </table>
             </div>

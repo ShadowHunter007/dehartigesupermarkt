@@ -36,11 +36,17 @@
                         <div class="col-md-6 text-right">
                             <form class="form-inline" action="#" th:action="@{/shoppingcart}" th:object="${product}" method="POST">
                                 <input type="hidden" th:field="${product.id}"/>
+                                <input type="hidden" th:field="${product.name}"/>
+                                <input type="hidden" th:field="${product.description}"/>
+                                <input type="hidden" th:field="${product.stock}"/>
+                                <input type="hidden" th:field="${product.price}"/>
+                                <input type="hidden" th:field="${product.vatPercentage}"/>
+                                <input type="hidden" th:field="${product.imagePath}"/>
                                 <div class="form-group">
                                     <label for="quantity">Aantal</label>
                                     <input type="number" class="form-control" name="quantity" id="quantity" min="1" th:max="${product.stock}"/>
                                 </div>
-                                <button class="btn btn-primary" type="submit">Voeg toe</button>
+                                <button class="btn btn-primary" type="submit" value="Submit">Voeg toe</button>
                             </form>
                         </div>
                     </div>

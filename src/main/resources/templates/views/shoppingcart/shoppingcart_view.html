@@ -1,7 +1,56 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
+<div th:replace="fragments/header :: header"></div>
+<div class = "container-fluid">
+    <div th:if="${shoppingcart == null || shoppingcart.orderLines.empty}" class="row">
+        <div class="col-xs-12">
+            <h3>Er zijn geen bestellingen gevonden in uw winkelwagen</h3>
+        </div>
+    </div>
+    <div th:if="!${shoppingcart.orderLines.empty}" class="row">
+        <div class="col-xs-12">
+            <h3>Winkelwagen</h3>
+            <table class="table table-hover">
+                <tr>
+                    <td></td>
+                    <td>Product:</td>
+                    <td>Prijs per stuk:</td>
+                    <td>Hoeveelheid:</td>
+                    <td>Totaalprijs:</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr th:each="orderLine : ${shoppingcart.orderLines}">
+                    <td><img th:src="${orderLine.value.product.imagePath}" width="100px" height="100px"/></td>
+                    <td th:text="${orderLine.value.product.name}"></td>
+                    <td th:text="'€ ' + ${orderLine.value.product.price}"></td>
+                    <form class="form-inline" action="#" th:action="@{/shoppingcart/update}" th:object="${shoppingcart}" method="POST">
+                        <input type="hidden" th:value="${orderLine.value.product.name}" name="productName"/>
+                        <td>
+                            <input style="width: 70px" type="number" th:value="${orderLine.value.amount}" class="form-control" name="quantity" id="quantity" min="1" th:max="${orderLine.value.product.stock}"/>
+                        </td>
+                        <td th:text="'€ ' + ${orderLine.value.totalPrice}"></td>
+                        <td><button class="btn btn-primary" type="submit">Update hoeveelheid</button></td>
+                    </form>
+                    <form class="form-inline" action="#" th:action="@{/shoppingcart/delete}" th:object="${shoppingcart}" method="POST">
+                        <td>
+                            <input type="hidden" th:value="${orderLine.value.product.name}" name="productName"/>
+                            <button class="btn btn-danger" type="submit">Verwijder product</button>
+                        </td>
+                    </form>
+                </tr>
+            </table>
+            <br/>
+            <a th:href="@{/shoppingcart/undo}" class="btn btn-danger">Undo winkelwagen</a>
+            <form class="form-inline" action="#" th:action="@{/orders}" th:object="${shoppingcart}" method="POST">
+                <input type="hidden" th:value="${shoppingcart.orderLines}" name="orderLines"/>
+                <button class="btn btn-primary" type="submit">Bevestigen</button>
+            </form>
+        </div>
+    </div>
+</div>
 <footer class="footer">
     <div th:replace="fragments/footer :: footer"></div>
 </footer>

@@ -9,7 +9,7 @@ public class Originator {
     private ShoppingCart shoppingCartState;
 
     public Memento save() {
-       return new Memento(shoppingCartState);
+       return new Memento(new ShoppingCart(shoppingCartState));
     }
 
     public void restore(Memento m) {

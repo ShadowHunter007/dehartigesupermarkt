@@ -87,12 +87,12 @@ public class ShoppingCartTest {
         Product product2 = new Product("product2", "description2", null, 3.2, 20, 6);
         Product product3 = new Product("product3", "description3", null, 1.87, 10, 6);
         //add
-        shoppingCart.add(product1, 5);
-        shoppingCart.add(product2, 5);
-        shoppingCart.add(product3, 5);
+        OrderLine orderLine1 = shoppingCart.add(product1, 5);
+        OrderLine orderLine2 = shoppingCart.add(product2, 5);
+        OrderLine orderLine3 = shoppingCart.add(product3, 5);
         //remove
-        shoppingCart.remove(product2, shoppingCart.get(product2.getName()).getAmount());
-        shoppingCart.remove(product3, 6);
+        shoppingCart.remove(orderLine2, orderLine2.getAmount());
+        shoppingCart.remove(orderLine3, 6);
         //do assertions
         assertTrue(shoppingCart.getOrderLines().size() == 1);
         Assertions.assertThat(shoppingCart.get(product2.getName())).isNull();
@@ -108,13 +108,13 @@ public class ShoppingCartTest {
         Product product2 = new Product("product2", "description2", null, 3.2, 20, 6);
         Product product3 = new Product("product3", "description3", null, 1.87, 10, 6);
         //add
-        shoppingCart.add(product1, 5);
-        shoppingCart.add(product2, 5);
-        shoppingCart.add(product3, 5);
+        OrderLine orderLine1 = shoppingCart.add(product1, 5);
+        OrderLine orderLine2 = shoppingCart.add(product2, 5);
+        OrderLine orderLine3 = shoppingCart.add(product3, 5);
         //remove
-        shoppingCart.remove(product1, 3);
-        shoppingCart.remove(product2, 1);
-        shoppingCart.remove(product3, 4);
+        shoppingCart.remove(orderLine1, 3);
+        shoppingCart.remove(orderLine2, 1);
+        shoppingCart.remove(orderLine3, 4);
         //result values stock
         int result1 = product1.getStock();
         int result2 = product2.getStock();

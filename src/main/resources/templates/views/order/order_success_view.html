@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
 <div class="container-fluid">
@@ -9,7 +9,7 @@
                 <h3>Er is iets misgegaan met het plaatsen van uw bestelilng. Neem contact op met de klantenservice</h3>
             </div>
         </div>
-        <div th:if="!{$order.empty}" class="row">
+        <div th:if="!${order.empty}" class="row">
             <div class="col-xs-12">
                 <h4>Dankuwel voor het plaatsen van uw bestelling, hieronder staan de belangrijkste details nog een keer van uw bestelling</h4>
             </div>

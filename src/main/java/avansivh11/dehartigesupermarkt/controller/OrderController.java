@@ -3,7 +3,6 @@ package avansivh11.dehartigesupermarkt.controller;
 import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.order.*;
-import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,13 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 
 @Controller
-@RequestMapping(value = "/orders")
 public class OrderController {
-    private final String ORDER_VIEW = "views/order/order_view.html";
-    private final String ORDER_SUCCESS = "views/order/order_success_view.html";
-    private final String ORDER_STATUS = "views/order/order_statu_view.html";
-    private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview.html";
-    private final String LOGIN_VIEW = "views/login/login.html";
+    private final String ORDER_VIEW = "views/order/order_view";
+    private final String ORDER_SUCCESS = "views/order/order_success_view";
+    private final String ORDER_STATUS = "views/order/order_statu_view";
+    private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview";
+    private final String LOGIN_VIEW = "views/login/login";
     private final CurrentUser currentUser;
 
     @Autowired
@@ -30,16 +28,14 @@ public class OrderController {
         this.currentUser = currentUser;
     }
 
-    @PostMapping("/")
-    public ModelAndView createOrder(
-            @RequestParam(value="shoppingcart") ShoppingCart shoppingCart
-    ) {
+    @PostMapping("/orders")
+    public ModelAndView createOrder() {
         //check if the user is logged in
         User customer = checkUserLogin();
         if(customer == null) {
             return new ModelAndView(LOGIN_VIEW);
         } else {
-            ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
+            ArrayList<OrderLine> orderLines = service.convertOrderLines(ShoppingCartConstants);
             BaseOrder order = new Order(customer, orderLines);
             service.saveOrder(order);
 
@@ -47,7 +43,7 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/orders/extra/{id}")
     public ModelAndView extraOptionsSubmit(
         @PathVariable("id") String id,
         @RequestParam(value="fastShipping", required=false) boolean fastShipping,
@@ -70,13 +66,13 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/{id}/status")
+    @GetMapping("/orders/status/{id}")
     public ModelAndView showOrderStatus(@PathVariable("id") String id) {
         BaseOrder order = service.getOrderById(Long.parseLong(id));
         return new ModelAndView(ORDER_STATUS, "order", order);
     }
 
-    @GetMapping("/status")
+    @GetMapping("/orders/status")
     public ModelAndView showOrderStatusOverview() {
         //check if the user is logged in
         User customer = checkUserLogin();

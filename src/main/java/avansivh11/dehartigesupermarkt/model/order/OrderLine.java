@@ -40,6 +40,12 @@ public class OrderLine {
         this.amount = amount;
         this.totalPrice = product.getPrice() * amount;
     }
+    //copy constructor
+    public OrderLine(OrderLine orderLine) {
+        this.product = orderLine.getProduct();
+        this.amount = orderLine.getAmount();
+        this.totalPrice = product.getPrice() * amount;
+    }
 
     public double getTotalPriceExVat() {
         BigDecimal totalPrice = new BigDecimal(product.getTotalPriceExVat() * amount);
