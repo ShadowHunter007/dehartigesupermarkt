@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,10 +16,11 @@ public class OrderDelivered extends OrderState {
     public OrderDelivered(BaseOrder context) {
         super(context);
         this.setStatusName("Delivered");
+        context.setStatusName(this.statusName);
     }
 
     @Override
     public void goNext(BaseOrder order) {
-
+        //nothing needs to be done here
     }
 }

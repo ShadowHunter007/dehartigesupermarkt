@@ -3,12 +3,15 @@ package avansivh11.dehartigesupermarkt.controller;
 import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.order.*;
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCartConstants;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @Controller
@@ -19,10 +22,9 @@ public class OrderController {
     private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview";
     private final String LOGIN_VIEW = "views/login/login";
     private final CurrentUser currentUser;
-
-    @Autowired
     private final OrderService service;
 
+    @Autowired
     public OrderController(OrderService service, CurrentUser currentUser) {
         this.service = service;
         this.currentUser = currentUser;
@@ -30,12 +32,14 @@ public class OrderController {
 
     @PostMapping("/orders")
     public ModelAndView createOrder() {
+        //retrieve the cached shopping cart
+        ShoppingCart shoppingCart = ShoppingCartConstants.SHOPPINGCART;
         //check if the user is logged in
         User customer = checkUserLogin();
         if(customer == null) {
             return new ModelAndView(LOGIN_VIEW);
         } else {
-            ArrayList<OrderLine> orderLines = service.convertOrderLines(ShoppingCartConstants);
+            ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
             BaseOrder order = new Order(customer, orderLines);
             service.saveOrder(order);
 
@@ -43,24 +47,39 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/orders/extra/{id}")
+    @PostMapping("/orders/update")
     public ModelAndView extraOptionsSubmit(
-        @PathVariable("id") String id,
-        @RequestParam(value="fastShipping", required=false) boolean fastShipping,
-        @RequestParam(value="giftWrapped", required=false) boolean giftWrapped,
-        @RequestParam(value="discount", required=false) boolean discount
+        @RequestParam("id") String id,
+        @RequestParam(value="fastShipping", required=false) String fastShippingString,
+        @RequestParam(value="giftWrapped", required=false) String giftWrappedString,
+        @RequestParam(value="discount", required=false) String discountString
     ) {
         //check if the user is logged in
         User customer = checkUserLogin();
         if(customer == null) {
             return new ModelAndView(LOGIN_VIEW);
         } else {
+            boolean fastShipping = false;
+            boolean giftWrapped = false;
+            boolean discount = false;
+            //convert booleans
+            if(fastShippingString != null && fastShippingString.equals("on")) {
+                fastShipping = true;
+            }
+            if(giftWrappedString != null && giftWrappedString.equals("on")) {
+                giftWrapped = true;
+            }
+            if(discountString != null && discountString.equals("on")) {
+                discount = true;
+            }
             //get the right order from the db
             BaseOrder order = service.getOrderById(Long.parseLong(id));
             //updates currentOrder automatically
-            order = decorateOrder(fastShipping, giftWrapped, discount, order);
+            BaseOrder wrappedOrder = decorateOrder(fastShipping, giftWrapped, discount, order);
             //update in the database
-            service.saveOrder(order);
+            //let JPA know to update orderlines instead of attempt to create new ones
+            wrappedOrder.setOrderLines(order.getOrderLines());
+            service.saveOrder(wrappedOrder);
 
             return new ModelAndView(ORDER_SUCCESS, "order", order);
         }

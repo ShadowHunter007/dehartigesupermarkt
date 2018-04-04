@@ -3,7 +3,7 @@
 <head th:replace="fragments/head :: head"></head>
 <body>
 <div th:replace="fragments/header :: header"></div>
-<div class = "container-fluid">
+<div class = "container">
     <div th:if="${shoppingcart == null || shoppingcart.orderLines.empty}" class="row">
         <div class="col-xs-12">
             <h3>Er zijn geen bestellingen gevonden in uw winkelwagen</h3>
@@ -45,7 +45,7 @@
             <br/>
             <a th:href="@{/shoppingcart/undo}" class="btn btn-danger">Undo winkelwagen</a>
             <form class="form-inline" action="#" th:action="@{/orders}" th:object="${shoppingcart}" method="POST">
-                <input type="hidden" th:value="${shoppingcart.orderLines}" name="orderLines"/>
+                <input type="hidden" th:value="${shoppingcart}" name="shoppingCart"/><br/>
                 <button class="btn btn-primary" type="submit">Bevestigen</button>
             </form>
         </div>

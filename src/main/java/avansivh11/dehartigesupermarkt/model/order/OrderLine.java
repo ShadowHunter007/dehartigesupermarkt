@@ -24,7 +24,7 @@ public class OrderLine {
     private Long id;
 
     @NotNull(message = "Er moet een product ingevuld zijn")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne/*(cascade = CascadeType.ALL)*/
     private Product product;
 
     //Included vat

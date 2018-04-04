@@ -9,23 +9,14 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name="Orders")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Order extends BaseOrder {
-    private double totalPrice;
-    @OneToOne
-    private User customer;
-    @OneToOne
-    private OrderState currentState;
-    private int weightClass;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<OrderLine> orderLines;
-
     public Order(User customer, List<OrderLine> orderLines) {
+        currentState = new OrderReceived(this);
         this.customer = customer;
         this.orderLines = orderLines;
         if(orderLines != null && !orderLines.isEmpty()) {
@@ -34,7 +25,6 @@ public class Order extends BaseOrder {
             //calculate weightclass
             weightClass = calculateWeightClass();
         }
-        currentState = new OrderReceived(this);
     }
 
     @Override

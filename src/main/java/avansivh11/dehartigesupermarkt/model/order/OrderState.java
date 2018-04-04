@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public abstract class OrderState {
     @Id
     protected Long id;
 
-    @Transient
+    //@Transient
     protected String statusName;
 
     @NotNull(message = "leverancier mag niet leeggelaten worden")

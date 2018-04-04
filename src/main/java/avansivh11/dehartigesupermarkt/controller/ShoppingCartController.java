@@ -7,6 +7,7 @@ import avansivh11.dehartigesupermarkt.model.product.Product;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.Caretaker;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.Memento;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCartConstants;
 import avansivh11.dehartigesupermarkt.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,7 @@ public class ShoppingCartController {
         if(customer == null) {
             return new ModelAndView(LOGIN_VIEW);
         } else {
+            ShoppingCartConstants.SHOPPINGCART = shoppingCart;
             return new ModelAndView(SHOPPINGCART_VIEW, "shoppingcart", shoppingCart);
         }
     }

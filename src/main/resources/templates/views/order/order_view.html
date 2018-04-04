@@ -2,19 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
-<div class="container-fluid">
-    <div th:if="${order.orderLines.empty}" class="row">
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div th:if="${order.orderLines == null || order.orderLines.empty}" class="row">
         <div class="col-xs-12">
             <h3>Er zijn geen bestellingen gevonden in uw winkelwagen</h3>
         </div>
     </div>
     <div th:if="!${order.orderLines.empty}" class="row">
         <div class="col-xs-12">
-            <h4 th:text="Bestelling voor: ${order.customer.username}"/>
-            <h4 th:text="Bestelnummer: ${order.id}"/>
-            <h4 th:text="Gewichtsklasse: ${order.weightClass}"/>
-            <h4 th:text="Naam klant: ${order.customer.username}"/>
-            <h4 th:text="E-mail klant: ${order.customer.email}"/>
+            <h4 th:text="'Bestelling voor: ' + ${order.customer.username}"/>
+            <h4 th:text="'Bestelnummer: ' + ${order.id}"/>
+            <h4 th:text="'Gewichtsklasse: ' + ${order.weightClass}"/>
+            <h4 th:text="'Naam klant: ' + ${order.customer.username}"/>
+            <h4 th:text="'E-mail klant: ' + ${order.customer.email}"/>
         </div>
     </div>
     <div class="row">
@@ -31,38 +32,40 @@
                 </thead>
                 <tbody>
                 <tr th:each="orderLine : ${order.orderLines}">
-                    <td th:text="${order.orderLine.id}"></td>
-                    <td th:text="${order.orderLine.product.name}"></td>
-                    <td th:text="${order.orderLine.product.description}"></td>
-                    <td th:text="${order.orderLine.amount}"></td>
-                    <td th:text="${order.orderLine.product.price}"></td>
+                    <td th:text="${orderLine.id}"></td>
+                    <td th:text="${orderLine.product.name}"></td>
+                    <td th:text="${orderLine.product.description}"></td>
+                    <td th:text="${orderLine.amount}"></td>
+                    <td th:text="${orderLine.product.price}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p style="font-weight:bold" th:text="'Totaalprijs excl. btw: ' + ${order.getExVatTotalPrice()}"></p>
+            <p style="font-weight:bold" th:text="'Totaalprijs incl. btw: ' + ${order.totalPrice}"></p>
+        </div>
+    </div>
         <!-- add second optional table for extra order options -->
     <div class="row">
         <div class="col-xs-12">
-            <form action="#" th:action="@{/orders/id}" method="put">
+            <h4>Extra opties:</h4>
+            <form action="#" th:action="@{/orders/update}" method="post">
+                <input type="hidden" th:value="${order.id}" name="id"/>
                 <div th:switch="${order.weightClass}">
-                    <p th:case="1">Snelle verzending: € 5,00</p>
-                    <p th:case="2">Snelle verzending: € 8,00</p>
-                    <p th:case="3">Snelle verzending: € 12,50</p>
-                </div><br/>
-                <input type="checkbox" name="fastShipping" value="0"/><br/>
+                    <p th:case="1"><input type="checkbox" name="fastShipping"/> &nbsp; Snelle verzending: € 5,00 </p>
+                    <p th:case="2"><input type="checkbox" name="fastShipping"/> &nbsp; Snelle verzending: € 8,00</p>
+                    <p th:case="3"><input type="checkbox" name="fastShipping"/> &nbsp; Snelle verzending: € 12,50</p>
+                </div>
                 <p>Als u deze optie aanvinkt, dan wordt uw bestelling geprioriteerd boven de gewone bestellingen en hebt u uw bestelling altijd binnen 24u binnen en meestal zelfs binnen een halve dag</p>
-                    <p>Bezorgen in verrassingsmand: € 3,50</p>
-                    <input type="checkbox" name="giftWrapped" value="0"/><br/>
-                    <p>Als u deze optie aanvinkt, dan wordt uw bestelling in een leuke verrassingsmand gebracht, ideaal voor als u een mandje met boodschappen wil samenstellen voor iemand als verrassing</p>
-                <p>Als u deze optie aanvinkt, dan krijgt u korting over uw bestelling (standaardkortingen zijn 10% over uw totaalbedrag)</p>
-                <input type="checkbox" name="discount" value=""/><br/>
+                <p><input type="checkbox" name="giftWrapped"/> &nbsp; Bezorgen in verrassingsmand: € 3,50</p>
+                <p>Als u deze optie aanvinkt, dan wordt uw bestelling in een leuke verrassingsmand gebracht, ideaal voor als u een mandje met boodschappen wil samenstellen voor iemand als verrassing</p>
+                <p><input type="checkbox" name="discount"/> &nbsp; 10% Korting</p>
+                <p>Als u deze optie aanvinkt, dan krijgt u korting over uw bestelling (standaardkortingen zijn 10% over uw totaalbedrag)</p><br/>
             `   <button type="submit" value="Confirm order" class="btn btn-success">Bestelling bevestigen</button>
             </form>
-        </div>
-        <div class="row">
-            <h4 th:text="Totaalprijs excl. btw: ${order.getExVatTotalPrice()}"></h4>
-            <h4 th:text="Totaalprijs incl. btw: ${order.totalPrice}"></h4>
         </div>
     </div>
 </div>
