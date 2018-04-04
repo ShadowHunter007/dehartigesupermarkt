@@ -2,47 +2,46 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
-<div class="container-fluid">
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
     <div class="row">
-        <div th:if="${order.empty}" class="row">
+        <div th:if="${order == null}" class="row">
             <div class="col-xs-12">
-                <h3>Er is iets misgegaan met het plaatsen van uw bestelilng. Neem contact op met de klantenservice</h3>
+                <h3>Er is iets misgegaan met het plaatsen van uw bestelling. Neem contact op met de klantenservice</h3>
             </div>
         </div>
-        <div th:if="!${order.empty}" class="row">
+        <div th:if="${order != null}" class="row">
             <div class="col-xs-12">
-                <h4>Dankuwel voor het plaatsen van uw bestelling, hieronder staan de belangrijkste details nog een keer van uw bestelling</h4>
+                <h4>Dankuwel voor het plaatsen van uw bestelling!</h4>
             </div>
             <div class="col-xs-12">
                 <table  class="table table-hover">
                     <thead>
                         <tr>
                             <td>Bestelling voor: </td>
-                            <td th:text="$order.customer.username}"></td>
+                            <td th:text="${order.customer.username}"></td>
                         </tr>
                         <tr>
                             <td>Bestelnummer:</td>
-                            <td th:text="$order.id}"></td>
+                            <td th:text="${order.id}"></td>
                         </tr>
                         <tr>
                             <td>Totaalprijs:</td>
-                            <td th:text="$order.totalPrice}"></td>
-                        </tr>
-                        <tr>
-                            <td>Naam: </td>
-                            <td th:text="$order.customer.username}"></td>
+                            <td th:text="${order.totalPrice}"></td>
                         </tr>
                         <tr>
                             <td>E-mail: </td>
-                            <td th:text="$order.customer.email}"></td>
+                            <td th:text="${order.customer.email}"></td>
                         </tr>
                     </thead>
                 </table>
             </div>
             <!-- additional information -->
-            <div class="col-xs-12">
-                <p>Hier kunt u de status van uw bestelling bekijken: </p>
-                <a th:href="@{/orders/(id=${order.id})/status}" class="btn btn-success">Details bestelling</a>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>Hier kunt u de status van uw bestelling bekijken: </p>
+                    <a th:href="@{/orders/status/{id}(id=${order.id})}" class="btn btn-success">Details bestelling</a>
+                </div>
             </div>
         </div>
     </div>

@@ -18,8 +18,7 @@ import java.util.ArrayList;
 public class OrderController {
     private final String ORDER_VIEW = "views/order/order_view";
     private final String ORDER_SUCCESS = "views/order/order_success_view";
-    private final String ORDER_STATUS = "views/order/order_statu_view";
-    private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview";
+    private final String ORDER_STATUS = "views/order/order_status_view";
     private final String LOGIN_VIEW = "views/login/login";
     private final CurrentUser currentUser;
     private final OrderService service;
@@ -85,23 +84,11 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/orders/status/{id}")
+    @RequestMapping(value="/orders/status/{id}", method=RequestMethod.GET)
     public ModelAndView showOrderStatus(@PathVariable("id") String id) {
-        BaseOrder order = service.getOrderById(Long.parseLong(id));
+        Long dbId = Long.parseLong(id);
+        BaseOrder order = service.getOrderById(dbId);
         return new ModelAndView(ORDER_STATUS, "order", order);
-    }
-
-    @GetMapping("/orders/status")
-    public ModelAndView showOrderStatusOverview() {
-        //check if the user is logged in
-        User customer = checkUserLogin();
-        if(customer == null) {
-            return new ModelAndView(LOGIN_VIEW);
-        } else {
-            ArrayList<BaseOrder> orders = service.getOrders();
-            return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
-        }
-
     }
 
     private BaseOrder decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount, BaseOrder currentOrder) {

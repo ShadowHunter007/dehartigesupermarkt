@@ -3,7 +3,6 @@ package avansivh11.dehartigesupermarkt.service;
 import avansivh11.dehartigesupermarkt.model.order.OrderLine;
 import avansivh11.dehartigesupermarkt.model.product.Product;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.Caretaker;
-import avansivh11.dehartigesupermarkt.model.shoppingcart.Memento;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.Originator;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
 import avansivh11.dehartigesupermarkt.repository.ProductRepository;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Getter
@@ -45,6 +43,7 @@ public class ShoppingCartService {
         int oldAmount = orderLine.getAmount();
         if(oldAmount != newAmount) {
             shoppingCart.changeAmount(orderLine, newAmount-oldAmount);
+            saveToDb(orderLine.getProduct());
         }
         return shoppingCart;
     }
@@ -59,6 +58,7 @@ public class ShoppingCartService {
                 returnOrderLine = returnShoppingCart.get(name);
                 try {
                     returnShoppingCart.remove(returnOrderLine, returnOrderLine.getAmount());
+                    saveToDb(returnOrderLine.getProduct());
                 } catch(Exception ex) {
                     ex.getLocalizedMessage();
                     System.out.println("Item " + name + " could not be deleted from the current shopping cart");
@@ -88,6 +88,7 @@ public class ShoppingCartService {
                     Product productToAdd = syncShoppingCart.get(name).getProduct();
                     int amountToAdd = syncShoppingCart.get(name).getAmount();
                     returnShoppingCart.add(productToAdd, amountToAdd);
+                    saveToDb(productToAdd);
                 } catch (Exception ex) {
                     ex.getLocalizedMessage();
                     System.out.println("Item " + name + " in shopping cart could not be restored");
@@ -102,5 +103,9 @@ public class ShoppingCartService {
     public ArrayList<Product> getAllProducts() {
         ArrayList<Product> products = (ArrayList<Product>)productRepository.findAll();
         return products;
+    }
+
+    public void saveToDb(Product product) {
+        productRepository.save(product);
     }
 }

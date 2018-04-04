@@ -103,6 +103,7 @@ public class ShoppingCartController {
         } else {
             OrderLine orderLine = shoppingCart.get(productName);
             shoppingCart.remove(orderLine, orderLine.getAmount());
+            service.saveToDb(orderLine.getProduct());
             //update memento
             service.updateMemento(shoppingCart);
 
@@ -147,5 +148,7 @@ public class ShoppingCartController {
         shoppingCart.add(product, amount);
         //update memento
         service.updateMemento(shoppingCart);
+        //update db
+        service.saveToDb(product);
     }
 }

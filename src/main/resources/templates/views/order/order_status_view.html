@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
-    <div class = "container-fluid">
+<div th:replace="fragments/header :: header"></div>
+    <div class = "container">
         <div class = "row">
             <div class="col-xs-6 ">
                 <h3>Informatie over bestelling</h3>
@@ -21,11 +22,11 @@
                     </tr>
                     <tr>
                         <td><strong>Totaalprijs bestelling:</strong></td>
-                        <td th:text="${order.customer.totalPrice}"></td>
+                        <td th:text="${order.totalPrice}"></td>
                     </tr>
                     <tr>
                         <td><strong>Status bestelling:</strong></td>
-                        <td th:text="${order.currentState.statusName}"></td>
+                        <td th:text="${order.statusName}"></td>
                     </tr>
                 </table>
             </div>
@@ -46,7 +47,7 @@
                     <tr th:each="orderLine : ${order.orderLines}">
                         <td th:text="${orderLine.product.name}"></td>
                         <td th:text="${orderLine.product.price}"></td>
-                        <td th:text="${orderLine.amount}}"></td>
+                        <td th:text="${orderLine.amount}"></td>
                         <td th:text="${orderLine.totalPrice}"></td>
                     </tr>
                     </tbody>
