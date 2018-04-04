@@ -1,5 +1,6 @@
 package avansivh11.dehartigesupermarkt.model.account;
 
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -71,12 +71,12 @@ public class ProductController {
         return "views/product/productSpecification";
     }
 
-    @PostMapping("/shoppingcart")
+   /* @PostMapping("/shoppingcart")
     public void shoppingCart(@RequestParam Long id, @RequestParam int quantity){
         //product id
         System.out.println(id);
         //order quantity
         System.out.println(quantity);
-    }
+    }*/
 
 }

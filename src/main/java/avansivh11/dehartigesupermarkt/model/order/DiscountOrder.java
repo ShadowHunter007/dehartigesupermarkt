@@ -17,8 +17,7 @@ public class DiscountOrder extends DecoratedOrder {
 
     public DiscountOrder(BaseOrder order) {
         super(order);
-        super.setWeightClass(order.getWeightClass());
-        this.setTotalPrice(calculateTotalPrice());
+        setTotalPrice(calculateTotalPrice());
     }
 
     @Override

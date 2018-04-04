@@ -2,11 +2,9 @@ package avansivh11.dehartigesupermarkt.service;
 
 import avansivh11.dehartigesupermarkt.model.order.*;
 import avansivh11.dehartigesupermarkt.repository.BaseOrderRepository;
-import com.sun.org.apache.bcel.internal.generic.FASTORE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service

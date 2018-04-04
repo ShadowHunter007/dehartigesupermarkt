@@ -12,7 +12,7 @@
                 <hr/>
             </div>
         </div>
-        <div th:if="${products.empty}" class="row">
+        <div th:if="${products == null || products.empty}" class="row">
             <div class="col-md-12 text-center">
                 <p>Er zijn geen producten gevonden.</p>
             </div>

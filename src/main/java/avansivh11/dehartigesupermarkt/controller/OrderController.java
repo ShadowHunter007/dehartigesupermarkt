@@ -1,73 +1,99 @@
 package avansivh11.dehartigesupermarkt.controller;
 
+import avansivh11.dehartigesupermarkt.Security.CurrentUser;
 import avansivh11.dehartigesupermarkt.model.account.User;
 import avansivh11.dehartigesupermarkt.model.order.*;
 import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCart;
+import avansivh11.dehartigesupermarkt.model.shoppingcart.ShoppingCartConstants;
 import avansivh11.dehartigesupermarkt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @Controller
-@RequestMapping(value = "/orders")
 public class OrderController {
-    private final String ORDER_VIEW = "views/order/order_view.html";
-    private final String ORDER_SUCCESS = "views/order/success.html";
-    private final String ORDER_STATUS = "views/order/order_status_view.html";
-    private final String ORDER_STATUS_OVERVIEW = "views/order/order_status_overview.html";
-
-    @Autowired
+    private final String ORDER_VIEW = "views/order/order_view";
+    private final String ORDER_SUCCESS = "views/order/order_success_view";
+    private final String ORDER_STATUS = "views/order/order_status_view";
+    private final String LOGIN_VIEW = "views/login/login";
+    private final CurrentUser currentUser;
     private final OrderService service;
 
-    public OrderController(OrderService service) {
+    @Autowired
+    public OrderController(OrderService service, CurrentUser currentUser) {
         this.service = service;
+        this.currentUser = currentUser;
     }
 
-    @PostMapping("/")
-    public ModelAndView createOrder(
-            @RequestParam(value="shoppingcart") ShoppingCart shoppingCart
-    ) {
-        ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
-        BaseOrder order = new Order(shoppingCart.getCustomer(), orderLines);
-        service.saveOrder(order);
+    @PostMapping("/orders")
+    public ModelAndView createOrder() {
+        //retrieve the cached shopping cart
+        ShoppingCart shoppingCart = ShoppingCartConstants.SHOPPINGCART;
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            ArrayList<OrderLine> orderLines = service.convertOrderLines(shoppingCart.getOrderLines());
+            BaseOrder order = new Order(customer, orderLines);
+            service.saveOrder(order);
 
-        return new ModelAndView(ORDER_VIEW, "order", order);
+            return new ModelAndView(ORDER_VIEW, "order", order);
+        }
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/orders/update")
     public ModelAndView extraOptionsSubmit(
-        @PathVariable("id") String id,
-        @RequestParam(value="fastShipping", required=false) boolean fastShipping,
-        @RequestParam(value="giftWrapped", required=false) boolean giftWrapped,
-        @RequestParam(value="discount", required=false) boolean discount
+        @RequestParam("id") String id,
+        @RequestParam(value="fastShipping", required=false) String fastShippingString,
+        @RequestParam(value="giftWrapped", required=false) String giftWrappedString,
+        @RequestParam(value="discount", required=false) String discountString
     ) {
-        //get the right order from the db
-        BaseOrder order = service.getOrderById(Long.parseLong(id));
-        //updates currentOrder automatically
-        order = decorateOrder(fastShipping, giftWrapped, discount, order);
-        //update in the database
-        service.saveOrder(order);
+        //check if the user is logged in
+        User customer = checkUserLogin();
+        if(customer == null) {
+            return new ModelAndView(LOGIN_VIEW);
+        } else {
+            boolean fastShipping = false;
+            boolean giftWrapped = false;
+            boolean discount = false;
+            //convert booleans
+            if(fastShippingString != null && fastShippingString.equals("on")) {
+                fastShipping = true;
+            }
+            if(giftWrappedString != null && giftWrappedString.equals("on")) {
+                giftWrapped = true;
+            }
+            if(discountString != null && discountString.equals("on")) {
+                discount = true;
+            }
+            //get the right order from the db
+            BaseOrder order = service.getOrderById(Long.parseLong(id));
+            //updates currentOrder automatically
+            BaseOrder wrappedOrder = decorateOrder(fastShipping, giftWrapped, discount, order);
+            //update in the database
+            //let JPA know to update orderlines instead of attempt to create new ones
+            wrappedOrder.setOrderLines(order.getOrderLines());
+            service.saveOrder(wrappedOrder);
 
-        return new ModelAndView(ORDER_SUCCESS, "order", order);
+            return new ModelAndView(ORDER_SUCCESS, "order", order);
+        }
     }
 
-    @GetMapping("/{id}/status")
+    @RequestMapping(value="/orders/status/{id}", method=RequestMethod.GET)
     public ModelAndView showOrderStatus(@PathVariable("id") String id) {
-        BaseOrder order = service.getOrderById(Long.parseLong(id));
+        Long dbId = Long.parseLong(id);
+        BaseOrder order = service.getOrderById(dbId);
         return new ModelAndView(ORDER_STATUS, "order", order);
-    }
-
-    @GetMapping("/status")
-    public ModelAndView showOrderStatusOverview() {
-        ArrayList<BaseOrder> orders = service.getOrders();
-        return new ModelAndView(ORDER_STATUS_OVERVIEW, "orders", orders);
     }
 
     private BaseOrder decorateOrder(boolean fastShipping, boolean giftWrapped, boolean discount, BaseOrder currentOrder) {
         if(currentOrder != null) {
+            //the order of the wrappings is important
             if (discount) {
                 DiscountOrder discountOrder = new DiscountOrder(currentOrder);
                 currentOrder = discountOrder;
@@ -84,5 +110,10 @@ public class OrderController {
             }
         }
         return currentOrder;
+    }
+
+    private User checkUserLogin() {
+        User customer = currentUser.getCurrentUser();
+        return customer;
     }
 }

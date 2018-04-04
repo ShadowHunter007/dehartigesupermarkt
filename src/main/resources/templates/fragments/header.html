@@ -21,6 +21,7 @@
             <div class="collapse navbar-collapse" id="bs-navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">Producten <span class="sr-only">(current)</span></a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null"><a href="/shoppingcart">Winkelwagen</a></li>
                     <!--<li><a href="#">Link</a></li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

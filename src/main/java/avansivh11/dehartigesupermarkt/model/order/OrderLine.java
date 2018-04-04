@@ -24,7 +24,7 @@ public class OrderLine {
     private Long id;
 
     @NotNull(message = "Er moet een product ingevuld zijn")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne/*(cascade = CascadeType.ALL)*/
     private Product product;
 
     //Included vat
@@ -38,6 +38,12 @@ public class OrderLine {
     public OrderLine(Product product, int amount) {
         this.product = product;
         this.amount = amount;
+        this.totalPrice = product.getPrice() * amount;
+    }
+    //copy constructor
+    public OrderLine(OrderLine orderLine) {
+        this.product = orderLine.getProduct();
+        this.amount = orderLine.getAmount();
         this.totalPrice = product.getPrice() * amount;
     }
 

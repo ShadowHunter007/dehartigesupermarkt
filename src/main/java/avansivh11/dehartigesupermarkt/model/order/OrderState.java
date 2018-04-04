@@ -5,14 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +16,9 @@ public abstract class OrderState {
     @GeneratedValue
     @Id
     protected Long id;
+
+    //@Transient
+    protected String statusName;
 
     @NotNull(message = "leverancier mag niet leeggelaten worden")
     protected String deliverer;
